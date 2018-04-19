@@ -1,0 +1,3 @@
+Winner: 2
+Reason: Bad Positioning input file for player 1 
+
