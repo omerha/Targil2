@@ -10,7 +10,7 @@ class TheGame
 	int numOfPlayers;
 	Player p[2];
 	int winner;
-	Piece gameBoard[N+1][M+1]; //need to check if we actually need this board
+//	Piece gameBoard[N+1][M+1]; //need to check if we actually need this board
 	int showMode;
 	int delayTime;
 	bool showOnlyKnownInfo;

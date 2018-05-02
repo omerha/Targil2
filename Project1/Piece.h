@@ -5,11 +5,19 @@
 #include <fstream>
 #include <sstream>
 #include "Color.h"
+#define EMPTY_PIECE '-'
+#define BOMB 'B'
+#define JOKER 'J'
+#define SCISSORS 'S'
+#define ROCK 'R'
+#define FLAG 'F'
+#define PAPER 'P'
+#define UNKNOWN_PIECE "U"
 using namespace std;
 
 class Piece
 {
-	int x, y;
+	//int x, y;
 	char pieceType;
 	bool joker;
 	bool revealType;
@@ -20,18 +28,18 @@ public:
 	{
 		revealJoker = true;
 		revealType = false;
-		x = y = 0;
+	//	x = y = 0;
 		joker = false;
-		pieceType = '-';
+		pieceType = EMPTY_PIECE;
 	}
-	int getPieceX()
-	{
-		return x;
-	}
-	int getPieceY()
-	{
-		return y;
-	}
+	//int getPieceX()
+	//{
+	//	return x;
+	//}
+	//int getPieceY()
+	//{
+	//	return y;
+	//}
 	char getPieceType()
 	{
 		return pieceType;
@@ -44,14 +52,14 @@ public:
 	{
 		revealJoker = jokerStatus;
 	}
-	void setPieceX(int pX)
-	{
-		x = pX;
-	}
-	void setPieceY(int pY)
-	{
-		y = pY;
-	}
+	//void setPieceX(int pX)
+	//{
+	//	x = pX;
+	//}
+	//void setPieceY(int pY)
+	//{
+	//	y = pY;
+	//}
 	void setPieceType(char pPieceType)
 	{
 		pieceType = pPieceType;

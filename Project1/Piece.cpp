@@ -39,7 +39,7 @@ void Piece::drawUnknownPiece(Color color, int xL, int yL)
 	if (revealType)
 		cout << pieceType;
 	else
-		cout << "U";
+		cout << UNKNOWN_PIECE;
 }
 
 

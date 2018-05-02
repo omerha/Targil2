@@ -14,7 +14,7 @@ Player::Player() //Constructor
 
 void Player::checkForCorrectType(char type, int numOfRow)
 {
-	if ((type != 'R') && (type != 'P') && (type != 'S') && (type != 'B') && (type != 'F'))
+	if ((type != ROCK) && (type != PAPER) && (type != SCISSORS) && (type != BOMB) && (type != FLAG))
 	{
 		setPlayerStatus(badPosition, unKnownPiece, numOfRow);
 	}
@@ -37,7 +37,7 @@ string* Player::parseLine(string line, int& size,int lineNum,Error error)//Gets 
 		{
 			if (getInput[i].length() >= 2)
 			{
-				if (getInput[i].length() > 2 || (!(isdigit(getInput[i][0]) && isdigit(getInput[i][1])) && getInput[i][0] != 'J'))
+				if (getInput[i].length() > 2 || (!(isdigit(getInput[i][0]) && isdigit(getInput[i][1])) && getInput[i][0] != JOKER))
 					setPlayerStatus(badPosition, wrongFormatRowInputFile, lineNum);
 			}
 			else if (getInput[i].empty())
@@ -101,7 +101,7 @@ bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLo
 			setPlayerStatus(badMoves, wrongFrormatRowMoveFile, moveNum+1); 
 			return false;
 		}
-		if (playerBoard[newX][newY].getPieceType() != '-')
+		if (playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
 		{
 			setPlayerStatus(badMoves, sameLocation, moveNum + 1);
 			return false;
@@ -116,17 +116,17 @@ bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLo
 			setPlayerStatus(badMoves, moveIllegal, moveNum+1);
 			return false;
 		}
-		if (playerBoard[currX][currY].getPieceType() == 'B')
+		if (playerBoard[currX][currY].getPieceType() == BOMB)
 		{
 			setPlayerStatus(badMoves, bombCantMove, moveNum + 1);
 			return false;
 		}
-		if (playerBoard[currX][currY].getPieceType() == 'F')
+		if (playerBoard[currX][currY].getPieceType() == FLAG)
 		{
 			setPlayerStatus(badMoves, flagCantMove, moveNum + 1);
 			return false;
 		}
-		if (playerBoard[currX][currY].getPieceType() == '-')
+		if (playerBoard[currX][currY].getPieceType() == EMPTY_PIECE)
 		{
 			setPlayerStatus(badMoves, notExistPiece, moveNum+1); //error the player is trying to move a piece that does not exist.
 			return false;
@@ -135,7 +135,7 @@ bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLo
 		{
 			if (currInput[4].length() == 2)
 			{
-				if (currInput[4][0] == 'J')
+				if (currInput[4][0] == JOKER)
 				{
 					if (isdigit(currInput[5][0]) && isdigit(currInput[6][0]))
 					{
@@ -155,7 +155,7 @@ bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLo
 					}
 					else if (playerBoard[xJoker][yJoker].getPieceJoker() || (playerBoard[currX][currY].getPieceJoker() && xJoker == newX && yJoker == newY))
 					{
-						if ((nJokerType != 'P') && (nJokerType != 'R') && (nJokerType != 'S') && (nJokerType != 'B'))
+						if ((nJokerType != PAPER) && (nJokerType != ROCK) && (nJokerType != SCISSORS) && (nJokerType != BOMB))
 						{
 							setPlayerStatus(badMoves, wrongInputJoker, moveNum+1);
 							return false;
@@ -187,7 +187,7 @@ bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLo
 		}
 		playerBoard[newX][newY].setRevealType(playerBoard[currX][currY].getRevealType());
 		playerBoard[newX][newY].setPieceType(playerBoard[currX][currY].getPieceType());
-		playerBoard[currX][currY].setPieceType('-');
+		playerBoard[currX][currY].setPieceType(EMPTY_PIECE);
 		oldXLocation = currX;
 		oldYLocation = currY;
 		newXLocation = newX;
@@ -255,13 +255,13 @@ void Player::readFromFile()//This function reads the first file and checks for e
 						setPlayerStatus(badPosition, notInRange, numOfRows);
 						return;
 					}
-					if (this->playerBoard[xLocation][yLocation].getPieceType() != '-') // There is a piece in this location
+					if (this->playerBoard[xLocation][yLocation].getPieceType() != EMPTY_PIECE) // There is a piece in this location
 					{
 						setPlayerStatus(badPosition, sameLocation, numOfRows);
 						return;
 					}
-					this->playerBoard[xLocation][yLocation].setPieceX(xLocation);
-					this->playerBoard[xLocation][yLocation].setPieceY(yLocation);
+					//this->playerBoard[xLocation][yLocation].setPieceX(xLocation);
+					//this->playerBoard[xLocation][yLocation].setPieceY(yLocation);
 				}
 				else
 				{
@@ -272,12 +272,12 @@ void Player::readFromFile()//This function reads the first file and checks for e
 				}
 				if (inputIndex == 4)
 				{
-					if (getInput[0][0] == 'J')
+					if (getInput[0][0] == JOKER)
 					{
 						playerBoard[xLocation][yLocation].setPieceJoker(true);
-						countPieces('J');
+						countPieces(JOKER);
 						type = getInput[3][0];
-						if ((type != 'P') && (type != 'R') && (type != 'S') && (type != 'B'))
+						if ((type != PAPER) && (type != ROCK) && (type != SCISSORS) && (type != BOMB))
 						{
 							setPlayerStatus(badPosition, unKnownPieceForJoker, numOfRows);
 							return;
@@ -340,7 +340,7 @@ void Player::checkValidityiPieces()
 
 void Player::removePiece(int i, int j, char type)
 {
-	playerBoard[i][j].setPieceType('-');
+	playerBoard[i][j].setPieceType(EMPTY_PIECE);
 	if (playerBoard[i][j].getPieceJoker())
 	{
 		counterPieces[J]--;
@@ -350,19 +350,19 @@ void Player::removePiece(int i, int j, char type)
 	{
 		switch (type)
 		{
-		case 'R':
+		case ROCK:
 			counterPieces[R]--;
 			break;
-		case 'S':
+		case SCISSORS:
 			counterPieces[S]--;
 			break;
-		case 'P':
+		case PAPER:
 			counterPieces[P]--;
 			break;
-		case 'B':
+		case BOMB:
 			counterPieces[B]--;
 			break;
-		case 'F':
+		case FLAG:
 			counterPieces[F]--;
 			break;
 		}
@@ -372,22 +372,22 @@ void Player::countPieces(char type)
 {
 	switch (type)
 	{
-	case 'R':
+	case ROCK:
 		counterPieces[R] += 1;
 		break;
-	case 'P':
+	case PAPER:
 		counterPieces[P] += 1;
 		break;
-	case 'B':
+	case BOMB:
 		counterPieces[B] += 1;
 		break;
-	case 'J':
+	case JOKER:
 		counterPieces[J] += 1;
 		break;
-	case 'F':
+	case FLAG:
 		counterPieces[F] += 1;
 		break;
-	case 'S':
+	case SCISSORS:
 		counterPieces[S] += 1;
 		break;
 	}
