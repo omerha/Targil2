@@ -7,10 +7,8 @@ void TheGame::init()//First function.
 	p[1].setColor(RED);
 	p[0].setInputFile("player1.rps_board");
 	p[0].setMoveFile("player1.rps_moves");
-	p[0].putMovesFileInStringArr();
 	p[1].setInputFile("player2.rps_board");
 	p[1].setMoveFile("player2.rps_moves");
-	p[1].putMovesFileInStringArr();
 	bool goodToInitBoard = true;
 
 	for (int i = 0; i < this->numOfPlayers; i++)
@@ -267,6 +265,7 @@ void TheGame::move(int moveNum)
 
 void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, const int & newY,const int& playerNum, const int& jokerX, const int& jokerY, const char& newJokerType)
 {
+	
 	int secondPlayerIndex = abs(playerNum - 1);
 	int fightRes = -1;
 	//if (gameBoard[newX][newY].getPieceType() != EMPTY_PIECE)//there is a piece already in this place - fight!

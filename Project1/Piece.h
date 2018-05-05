@@ -13,6 +13,16 @@
 #define FLAG 'F'
 #define PAPER 'P'
 #define UNKNOWN_PIECE "U"
+#define NUM_OF_PIECES_TYPE 6
+enum Pieces
+{
+	R = 0,
+	P = 1,
+	S = 2,
+	J = 3,
+	B = 4,
+	F = 5
+};
 using namespace std;
 
 class Piece

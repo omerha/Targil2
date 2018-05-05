@@ -8,193 +8,36 @@ Player::Player() //Constructor
 	status = noReason;
 	for (int i = 0; i < 6; i++)
 		counterPieces[i] = 0;
+	playerBoard = new Piece*[N + 1];
+	for (int i = 0; i < M + 1; i++) {
+		playerBoard[i] = new Piece[M + 1];
+	}
 	error = noError;
 	errorLine = 0;
 }
 
-void Player::checkForCorrectType(char type, int numOfRow)
+Player::~Player()
 {
-	if ((type != ROCK) && (type != PAPER) && (type != SCISSORS) && (type != BOMB) && (type != FLAG))
-	{
-		setPlayerStatus(badPosition, unKnownPiece, numOfRow);
+	for (int i = 0; i < M + 1; i++) {
+		delete[] playerBoard[i];
 	}
+	delete[] playerBoard;
 }
-string* Player::parseLine(string line, int& size,int lineNum,Error error)//Gets a line and parsing it as asked.
-{
-	string tmpRead, temp;
-	istringstream tempCh(line);
-	int inputIndex = 0;
-	string getInput[20] = { "0" };
-	while (getline(tempCh, temp, ' '))
-	{
-		if(!(temp.empty()))
-		getInput[inputIndex++] = temp;
-	}
-	if (inputIndex)
-	{
-		string* out = new string[inputIndex];
-		for (int i = 0; i < inputIndex; i++)
-		{
-			if (getInput[i].length() >= 2)
-			{
-				if (getInput[i].length() > 2 || (!(isdigit(getInput[i][0]) && isdigit(getInput[i][1])) && getInput[i][0] != JOKER))
-					setPlayerStatus(badPosition, wrongFormatRowInputFile, lineNum);
-			}
-			else if (getInput[i].empty())
-				setPlayerStatus(badPosition, wrongFormatRowInputFile, lineNum);
-			out[i] = getInput[i];
-		}
-		size = inputIndex;
-		return out;
-	}
-	else
-		return nullptr;
-}
-void Player::putMovesFileInStringArr()//Puts all moves into array and counts them.
-{
-	bool illegalFile = false;
-	int numOfRows = 0;
-	string tmpReadFile;
-	ifstream inFile(this->movesFile);
-	if (inFile.fail())
-	{
-		illegalFile = true;
-	}
-	while (!inFile.eof() && !illegalFile)
-	{
-		if (getline(inFile, tmpReadFile))
-		{
-			if(!(tmpReadFile.empty()))
-			movesArr[numOfRows++] = tmpReadFile;
-		}
-		else
-		{
-			//setPlayerStatus(badMoves, errorFile, 0);
-		}
-	}
-	numOfMoves = numOfRows;
-}
+
+
 bool Player::move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType)
-{//This functino reads the move files and check for erros.
-	int xJoker, yJoker;
-	string* currInput = nullptr;
-	int numOfIndex = 0;
-	char nJokerType;
-	int currX = 0, currY = 0, newX = 0, newY = 0;
-	if (moveNum < numOfMoves)
+{
+	if (moveFile.readMove(moveNum, newXLocation, newYLocation, oldXLocation, oldYLocation, jokerXLocation, jokerYLocation, newJokerType, playerBoard))
 	{
-		currInput = parseLine(movesArr[moveNum], numOfIndex, moveNum, wrongFrormatRowMoveFile);
-		if (numOfIndex < 4 || numOfIndex>8)
-		{
-			setPlayerStatus(badMoves, wrongFrormatRowMoveFile, moveNum); //error - too many or too few arguments in line.
-			return false;
-		}
-		if (isdigit(currInput[0][0]) && isdigit(currInput[1][0]) && isdigit(currInput[2][0]) && isdigit(currInput[3][0]))
-		{
-			currX = stoi(currInput[0]);
-			currY = stoi(currInput[1]);
-			newX = stoi(currInput[2]);
-			newY = stoi(currInput[3]);
-		}
-		else
-		{
-			setPlayerStatus(badMoves, wrongFrormatRowMoveFile, moveNum+1); 
-			return false;
-		}
-		if (playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
-		{
-			setPlayerStatus(badMoves, sameLocation, moveNum + 1);
-			return false;
-		}
-		if (!(checkXYInRange(currX, 'X') && checkXYInRange(newX, 'X') && checkXYInRange(newY, 'Y') && checkXYInRange(currY, 'Y')))
-		{
-			setPlayerStatus(badMoves, notInRange, moveNum+1); //error x y not in range.
-			return false;
-		}
-		if (checkMoveisLegal(currX, currY, newX, newY, playerBoard[currX][currY].getPieceType())) // move more than on square
-		{
-			setPlayerStatus(badMoves, moveIllegal, moveNum+1);
-			return false;
-		}
-		if (playerBoard[currX][currY].getPieceType() == BOMB)
-		{
-			setPlayerStatus(badMoves, bombCantMove, moveNum + 1);
-			return false;
-		}
-		if (playerBoard[currX][currY].getPieceType() == FLAG)
-		{
-			setPlayerStatus(badMoves, flagCantMove, moveNum + 1);
-			return false;
-		}
-		if (playerBoard[currX][currY].getPieceType() == EMPTY_PIECE)
-		{
-			setPlayerStatus(badMoves, notExistPiece, moveNum+1); //error the player is trying to move a piece that does not exist.
-			return false;
-		}
-		if (numOfIndex > 6)//means there is a move for the joker. 
-		{
-			if (currInput[4].length() == 2)
-			{
-				if (currInput[4][0] == JOKER)
-				{
-					if (isdigit(currInput[5][0]) && isdigit(currInput[6][0]))
-					{
-						 xJoker = stoi(currInput[5]);
-						 yJoker = stoi(currInput[6]);
-					}
-					else
-					{
-						setPlayerStatus(badMoves, wrongInputJoker, moveNum + 1);
-						return false;
-					}
-					nJokerType = currInput[7][0];
-					if (!(checkXYInRange(xJoker, 'X') && checkXYInRange(yJoker, 'Y')))//Something is wrong with joker xy coordinates
-					{
-						setPlayerStatus(badMoves, jokerNotInRange, moveNum+1);
-						return false;
-					}
-					else if (playerBoard[xJoker][yJoker].getPieceJoker() || (playerBoard[currX][currY].getPieceJoker() && xJoker == newX && yJoker == newY))
-					{
-						if ((nJokerType != PAPER) && (nJokerType != ROCK) && (nJokerType != SCISSORS) && (nJokerType != BOMB))
-						{
-							setPlayerStatus(badMoves, wrongInputJoker, moveNum+1);
-							return false;
-						}
-						else
-						{
-							jokerXLocation = xJoker;
-							jokerYLocation = yJoker;
-							newJokerType = nJokerType;
-						}
-					}
-					else
-					{
-						setPlayerStatus(badMoves, notExistJoker, moveNum+1); //Error- not exit joker in this location
-						return false;
-					}
-				}
-				else //The wrong is for example: "K:" insted of "J:"
-				{
-					setPlayerStatus(badMoves, wrongFrormatRowMoveFile, moveNum+1);
-					return false;
-				}
-			}
-			else //The wrong, for example: "J::" insted of "J:"
-			{
-				setPlayerStatus(badMoves, wrongFrormatRowMoveFile, moveNum+1);
-				return false;
-			}
-		}
-		playerBoard[newX][newY].setRevealType(playerBoard[currX][currY].getRevealType());
-		playerBoard[newX][newY].setPieceType(playerBoard[currX][currY].getPieceType());
-		playerBoard[currX][currY].setPieceType(EMPTY_PIECE);
-		oldXLocation = currX;
-		oldYLocation = currY;
-		newXLocation = newX;
-		newYLocation = newY;
 		return true;
 	}
-	delete[] currInput;
+	else
+	{
+		setPlayerStatus(moveFile);
+		return false;
+	}
+	//This functino reads the move files and check for erros.
+
 }
 
 
@@ -205,124 +48,56 @@ void Player::setPlayerStatus(Reason reason, Error theError, int line) //If error
 	errorLine = line;
 }
 
+void Player::setPlayerStatus(const Files& currFile)
+{
+	status = currFile.getFileStatus();
+	errorLine = currFile.getErrorLine();
+	error = currFile.getFileError();
+}
+
 void Player::readFromFile()//This function reads the first file and checks for errors in
 {
+	startFile.setInputFile(startGameFile,playerBoard);
 	bool illegalFile = false;
 	int numOfRows = 0, inputIndex = 0;
-	string tmpRead;
-	string* getInput =nullptr;
+	string tmpRead[10] = { "0" };
+	string getInput;
+	int index=0;
 	ifstream inFile(this->startGameFile);
 	int xLocation, yLocation;
 	char type;
-	if (inFile.fail())
+	int maxRows = startFile.getnumOfStartMoves();
+	if (startFile.getFileStatus() != noReason)
 	{
-		setPlayerStatus(badPosition, notExistFile, 0);
-		illegalFile = true;
-		return;
+		setPlayerStatus(startFile);
 	}
-	while (!inFile.eof() && !illegalFile )
+	while (numOfRows < maxRows)
 	{
-		
-		if (numOfRows > K)
+		index = 0;
+		getInput = startFile.getCurrLine("inputFile", numOfRows);
+		stringstream chs(getInput);
+		string omer;
+		while (getline(chs, omer, ' '))
+			tmpRead[index++] = omer;
+		index = 0;
+		numOfRows++;
+		type = tmpRead[index++][0];
+		xLocation = stoi(tmpRead[index++]);
+		yLocation = stoi(tmpRead[index++]);
+		if (type == JOKER)
 		{
-			setPlayerStatus(badPosition, tooManyRows, numOfRows);
-			illegalFile = true;
-			return;
+			playerBoard[xLocation][yLocation].setPieceJoker(true);
+			countPieces(JOKER);
+			type = tmpRead[index++][0];
+			playerBoard[xLocation][yLocation].setPieceType(type);
 		}
-		else if (getline(inFile, tmpRead))
+		else 
 		{
-			if (!tmpRead.empty())
-			{
-				numOfRows++;
-				inputIndex = 0;
-				getInput = parseLine(tmpRead, inputIndex, numOfRows, wrongFormatRowInputFile);
-				if ((inputIndex == 3) || (inputIndex == 4))
-				{
-
-					type = getInput[0][0];
-					if (isdigit(getInput[1][0]) && isdigit(getInput[2][0]))
-					{
-						xLocation = stoi(getInput[1]);
-						yLocation = stoi(getInput[2]);
-					}
-					else
-					{
-						setPlayerStatus(badPosition, wrongFormatRowInputFile, numOfRows);
-						return;
-					}
-					if (!(checkXYInRange(yLocation, 'Y') && checkXYInRange(xLocation, 'X')))
-					{
-						setPlayerStatus(badPosition, notInRange, numOfRows);
-						return;
-					}
-					if (this->playerBoard[xLocation][yLocation].getPieceType() != EMPTY_PIECE) // There is a piece in this location
-					{
-						setPlayerStatus(badPosition, sameLocation, numOfRows);
-						return;
-					}
-					//this->playerBoard[xLocation][yLocation].setPieceX(xLocation);
-					//this->playerBoard[xLocation][yLocation].setPieceY(yLocation);
-				}
-				else
-				{
-					if (inputIndex) {
-						setPlayerStatus(badPosition, wrongFormatRowInputFile, numOfRows); // the length line isn't 3 or 4 chars
-						return;
-					}
-				}
-				if (inputIndex == 4)
-				{
-					if (getInput[0][0] == JOKER)
-					{
-						playerBoard[xLocation][yLocation].setPieceJoker(true);
-						countPieces(JOKER);
-						type = getInput[3][0];
-						if ((type != PAPER) && (type != ROCK) && (type != SCISSORS) && (type != BOMB))
-						{
-							setPlayerStatus(badPosition, unKnownPieceForJoker, numOfRows);
-							return;
-						}
-						else playerBoard[xLocation][yLocation].setPieceType(type);
-
-					}
-					else
-					{
-						setPlayerStatus(badPosition, wrongFormatRowInputFile, numOfRows);
-						return;
-
-					}
-				}
-				else if (inputIndex == 3)
-				{
-					checkForCorrectType(type, numOfRows);
-					if (status == noReason)
-					{
-						playerBoard[xLocation][yLocation].setPieceType(type);
-						countPieces(type);
-					}
-					else // //If the piece type isn't one of the pieces in the game
-					{
-						return;
-					}
-
-				}
-				if ((inputIndex == 0) && (numOfRows == 1)) 
-				{
-					setPlayerStatus(badPosition, emptyFile, numOfRows); //File is empty 
-					return;
-				}
-				delete[] getInput;
-			}
+			playerBoard[xLocation][yLocation].setPieceType(type);
+			countPieces(type);
 		}
 	}
-
-	if (numOfRows == 0)
-			setPlayerStatus(badPosition, wrongFormatRowInputFile, numOfRows); // error input
-		
 }
-
-
-
 void Player::checkValidityiPieces()
 {
 	//The print is just for checking how many pieces each type there is for the each player
@@ -394,24 +169,6 @@ void Player::countPieces(char type)
 
 }
 
-bool Player::checkXYInRange(int num,char cord)
-{
-	if (cord == 'X')
-	{
-		if (num < 1 || num>10) // X coordinate isn't inrange
-		{
-			return false;
-		}
-	}
-	if (cord == 'Y')
-	{
-		if (num < 1 || num>10) // X coordinate isn't inrange
-		{
-			return false;
-		}
-	}
-	return true;
-}
 
 void Player::printError()
 {
@@ -535,14 +292,4 @@ void Player::hideJoker()
 			}
 		}
 	}
-}
-
-bool Player::checkMoveisLegal(const int & currX, const int & currY, const int & newX, const int & newY,const char& type)
-{
-	if ((abs(currX - newX) > 1) || (abs(currY - newY) > 1))
-		return true;
-	else if (((abs(currX - newX) == 1) && (abs(currY - newY) == 1)) && ((currX != newX) && (currY != newY))) // check for cross
-		return true;
-	else
-		return false;
 }
