@@ -1,10 +1,15 @@
 #pragma once
-
 #include "io_utils.h"
 #include "Player.h"
+#include <string>
+#include <iostream>
+
 #define QUIET_MODE -1
 #define SHOWALL_MODE 2
 #define TIE 0
+#define NUM_OF_PALYERS 2
+using namespace std;
+
 class TheGame
 {
 	int numOfPlayers;
@@ -19,8 +24,9 @@ public:
 	void init();
 	void initStartBoard();
 	void run();
+	void run2();
 	void checkForWinner();
-	int pieceFight(int i, int j);
+	int pieceFight(Piece p1, Piece p2);
 	void setFightResult(int fightResult, int xLoc, int yLoc);
 	TheGame() 
 	{
@@ -51,4 +57,5 @@ public:
 		showOnlyKnownInfo = unkownInfoMode;
 	}
 	void drawBoardLines();
+	void updatePieceAfterFight(int i, int j, int res);
 };

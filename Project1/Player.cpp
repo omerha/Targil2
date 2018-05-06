@@ -113,8 +113,9 @@ void Player::checkValidityiPieces()
 	}
 }
 
-void Player::removePiece(int i, int j, char type)
+void Player::removePiece(int i, int j)
 {
+	char type = playerBoard[i][j].getPieceType();
 	playerBoard[i][j].setPieceType(EMPTY_PIECE);
 	if (playerBoard[i][j].getPieceJoker())
 	{

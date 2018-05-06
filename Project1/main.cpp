@@ -18,6 +18,7 @@ int main(int argc,char* argv[])
 	argumentsToMain(argc, argv, game);
 	
 	game.run();
+
 }
 
 //Output Examples:

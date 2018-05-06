@@ -19,6 +19,7 @@
 #define NUM_OF_FLAG 1
 
 
+
 class Player
 {
 	friend class TheGame;
@@ -39,7 +40,7 @@ public:
 	void readFromFile();
 	void checkValidityiPieces();
 	void countPieces(char type);
-	void removePiece(int i, int j, char type);
+	void removePiece(int i, int j);
 	Player();
 	~Player();
 	bool move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType);

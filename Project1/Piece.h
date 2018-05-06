@@ -1,5 +1,5 @@
 #pragma once
-
+using namespace std;
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -23,7 +23,7 @@ enum Pieces
 	B = 4,
 	F = 5
 };
-using namespace std;
+
 
 class Piece
 {
@@ -96,4 +96,6 @@ public:
 	void removePiece(int xL, int yL);
 	void drawPiece(Color color, int xL, int yL);
 	void drawUnknownPiece(Color color, int xL, int yL);
+	bool operator > (const Piece &p) ;
+	bool operator == (const Piece &p) ;
 };

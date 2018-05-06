@@ -42,7 +42,8 @@ void TheGame::initStartBoard()
 			if ((p[0].playerBoard[i][j].getPieceType() != EMPTY_PIECE) && (p[1].playerBoard[i][j].getPieceType() != EMPTY_PIECE))
 			{
 				
-				res = pieceFight(i, j);
+				res = pieceFight(p[0].playerBoard[i][j], p[1].playerBoard[i][j]);
+				updatePieceAfterFight(i, j, res);
 				setFightResult(res, i, j);
 			}
 			//else if (p[0].playerBoard[i][j].getPieceType() != EMPTY_PIECE)
@@ -55,78 +56,36 @@ void TheGame::initStartBoard()
 	
 }
 
-
-int TheGame::pieceFight(int i, int j)
-{  // The function gets two indexes and checks which piece is stronger, erases the second piece, 
-	//updates the number of tools, returns 0 if a tie, 1 if the first player wins, and 2 if the second player is analyzed, otherwise returns -1
-	char typePlayer1 = p[0].playerBoard[i][j].getPieceType();
-	char typePlayer2 = p[1].playerBoard[i][j].getPieceType();
-	if ((typePlayer1 == typePlayer2) || ((typePlayer1 == BOMB) || (typePlayer2 == BOMB))) //If both players have the same piece or one of the players has a bomb
-	{
-		p[0].removePiece(i, j, typePlayer1);
-		p[1].removePiece(i, j, typePlayer2);
+int TheGame::pieceFight(Piece p1, Piece p2)
+{  // The function gets two objects of Pieces and returns 0 if a tie, 1 if the first player wins, and 2 if the second player wins
+	if (p1 == p2)
 		return 0;
-	}
-	if (typePlayer1 == FLAG) //Player 2 captures the flag of player 1
-	{
-		p[0].removePiece(i, j, typePlayer1);
-		p[1].removePiece(i, j, typePlayer2);
-		return 2;
-	}
-	if (typePlayer2 == FLAG) //Player 1 captures the flag of player 2
-	{
-		p[0].removePiece(i, j, typePlayer1);
-		p[1].removePiece(i, j, typePlayer2);
+	else if (p1 > p2)
 		return 1;
-	}
-	else
+	else 
+		return 2;	
+}
+
+void TheGame::updatePieceAfterFight(int i, int j, int res)
+{
+	if (res == 0)
 	{
-		switch (typePlayer1)
-		{
-		case ROCK:
-			if (typePlayer2 == SCISSORS) //The piece of player 1 win
-			{
-				p[1].removePiece(i, j, typePlayer2);
-				return 1;
-			}
-			else if (typePlayer2 == PAPER) //The piece of player 2 win
-			{
-				p[0].removePiece(i, j, typePlayer1);
-				return 2;
-			}
-			return -1;
-			break;
-		case SCISSORS:
-			if (typePlayer2 == ROCK) //The piece of player 2 win
-			{
-				p[0].removePiece(i, j, typePlayer1);
-				return 2;
-			}
-			else if (typePlayer2 == PAPER) //The piece of player 1 win
-			{
-				p[1].removePiece(i, j, typePlayer2);
-				return 1;
-			}
-			return -1;
-			break;
-		case PAPER:
-			if (typePlayer2 == SCISSORS) //The piece of player 2 win
-			{
-				p[0].removePiece(i, j, typePlayer1);
-				return 2;
-			}
-			else if (typePlayer2 == ROCK) //The piece of player 1 win
-			{
-				p[1].removePiece(i, j, typePlayer2);
-				return 1;
-			}
-			return -1;
-			break;
-		default:
-			return -1;
-			break;
-		}
+		p[0].removePiece(i, j);
+		p[1].removePiece(i, j);
+		return;
 	}
+	
+	else if (res == 1)
+	{
+		p[1].removePiece(i, j);
+		return;
+	}
+	else if (res == 2)
+	{
+		p[0].removePiece(i, j);
+		return;
+	}
+
 }
 
 void TheGame::setFightResult(int fightResult, int xLoc, int yLoc)//Recevies fight result and updates all board accordindly.
@@ -242,6 +201,24 @@ void TheGame::run()
 	createOutputFile();
 }
 
+void TheGame::run2()
+{
+	string tmpLine;
+	char jokerTypeTmp;
+	int i;
+	bool endOfInput1, endOfInput2;
+	for (i = 0; i < NUM_OF_PALYERS; i++)
+	{
+		cout << "Player " << i+1 << " please insert the piece type and the coordinates to locate the poece on the board\n";
+		getline(cin, tmpLine);
+		if (tmpLine[0] == 'J')
+		{
+			cout << "Player " << i + 1 << " [lease insert the initial representation of the joker\n";
+			jokerTypeTmp = getchar();
+		}	
+	}	
+}
+
 void TheGame::move(int moveNum)
 {
 	int i;
@@ -271,7 +248,7 @@ void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, co
 	//if (gameBoard[newX][newY].getPieceType() != EMPTY_PIECE)//there is a piece already in this place - fight!
 	if(p[secondPlayerIndex].playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
 	{
-		fightRes = pieceFight(newX, newY);
+		fightRes = pieceFight(p[0].playerBoard[newX][newY], p[1].playerBoard[newX][newY]);
 		setFightResult(fightRes, newX, newY);
 	}
 	else
@@ -507,4 +484,6 @@ void TheGame::drawBoardLines()
 		cout << j;
 	}
 }
+
+
 
