@@ -22,7 +22,7 @@ class FilesPlayer : public Player {
 	string inputFile[MAX_MOVES];
 	int numOfMoves = 0;
 	int numOfStartMoves = 0;
-
+	int currentMove = 0;
 public:
 	FilesPlayer() : Player() {};
 	void setInputFile(string fileName,string moveFile)
@@ -35,13 +35,8 @@ public:
 			illegalFile = true;
 		}
 		getPlayerStartMoves(startGameFile);
-		if (status != noReason)
+		if (status == noReason)
 			readMovesFile();
-	}
-
-	int getnumOfStartMoves()
-	{
-		return numOfStartMoves;
 	}
 	int getnumOfMoves()
 	{
@@ -64,14 +59,11 @@ public:
 	}
 	void readMovesFile();
 	
-	bool readMove(int moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType,Piece** playerBoard);
+	virtual bool move(int& moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType) override;
 	virtual void  getPlayerStartMoves() override;
 	void getPlayerStartMoves(string fileName);
 	void setFileStatus(Reason reason, Error theError, int line);
-	string* parseLine(string line, int& size, int lineNum, Error error);
-	bool checkXYInRange(int num, char cord);
-	bool checkForCorrectType(const char& type,const int& numOfRow);
-	bool checkForCorrectJokerType(const char& type, const int& numOfRow);
-	bool checkMoveisLegal(const int& currX, const int& currY, const int& newX, const int& newY);
-	bool checkIfPieceCanMove(const char& type, const int& lineNum);
+	
+
+	
 };

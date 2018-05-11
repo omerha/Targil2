@@ -11,9 +11,7 @@ void TheGame::init()//First function.
 	for (int i = 0; i < this->numOfPlayers; i++)
 	{
 		p[i] = new FilesPlayer();
-
 		p[i]->getPlayerStartMoves();
-
 		if (p[i]->status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
 		{
 			p[i]->checkValidityiPieces();
@@ -226,10 +224,12 @@ void TheGame::move(int moveNum)
 	int i;
 	int newX = 0, newY = 0, oldX = 0, oldY = 0, jokerX = 0, jokerY = 0;
 	char newJokerType = EMPTY_PIECE;
-	if ((p[0]->numOfMoves < moveNum) && (p[1]->numOfMoves < moveNum))
-	{
-		over = true;
-		p[0]->status = p[1]->status = moveFilesDone;
+	if (typeid(*p[0]) == typeid(FilesPlayer)) {
+		if ((((FilesPlayer*)p[0])->getnumOfMoves() < moveNum) && (((FilesPlayer*)p[1])->getnumOfMoves() < moveNum))
+		{
+			over = true;
+			p[0]->status = p[1]->status = moveFilesDone;
+		}
 	}
 	for (i = 0; i < numOfPlayers && !over; i++)
 	{
@@ -247,19 +247,11 @@ void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, co
 	
 	int secondPlayerIndex = abs(playerNum - 1);
 	int fightRes = -1;
-	//if (gameBoard[newX][newY]->getPieceType() != EMPTY_PIECE)//there is a piece already in this place - fight!
 	if(p[secondPlayerIndex]->playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
 	{
 		fightRes = pieceFight(p[0]->playerBoard[newX][newY], p[1]->playerBoard[newX][newY]);
 		setFightResult(fightRes, newX, newY);
 	}
-	else
-	{
-	//	gameBoard[newX][newY]->setPieceType(gameBoard[oldX][oldY].getPieceType());
-		//gameBoard[newX][newY]->setPieceJoker(p[playerNum].playerBoard[oldX][oldY].getPieceJoker());
-	}
-	//gameBoard[oldX][oldY]->setPieceType(EMPTY_PIECE);
-	//gameBoard[oldX][oldY]->setPieceJoker(false);
 	if (newJokerType != EMPTY_PIECE || p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())
 	{
 		if (p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())
@@ -377,66 +369,66 @@ void TheGame::drawGameBoard()
 
 void TheGame::createOutputFile()
 {
-	ofstream outfile("output.txt");
-	if (outfile.is_open())
-	{
-		outfile << "Winner: " << winner << "\n";
-		outfile << "Reason: " ;
-		if (winner == 1)
-		{
-			outfile << p[1]->returnReason();
-			if (p[1]->status>2)
-				outfile  <<"for player 2 ";
-			if (p[1]->errorLine!=0)
-			{
-				outfile << "line " << p[1]->errorLine;
-			}
-		}
-		else if (winner == 2)
-		{
-			outfile << p[0]->returnReason();
-			if (p[0]->status>2)
-				outfile << "for player 1 ";
-			if (p[0]->errorLine!=0)
-			{
-				outfile << "line " << p[0]->errorLine;
-			}
-		}
-		else if (winner == 0)
-		{
-			if (p[0]->status == p[1]->status)
-			{
-				if (p[0]->status==badPosition)
-					outfile << "Bad Positioning input files for both players- player 1: line " << p[0]->errorLine << ", player 2: line " << p[1]->errorLine;
-				if ((p[0]->status == moveFilesDone) || (p[0]->status==flagsCaptured) || (p[0]->status==allEaten))
-					outfile << "A tie - both Moves input files done without a winner";
-			}
-			else
-			{
-				outfile << p[0]->returnReason();
-				if (p[0]->errorLine != 0)
-				{
-					outfile << " player 1 line " << p[0]->errorLine;
-				}
-				outfile << " and "<< p[1]->returnReason();
-				if (p[1]->errorLine != 0)
-				{
-					outfile << " player 2 line " << p[1]->errorLine;
-				}
-			}
-		}
-		outfile << "\n\n";
-		if ((p[0]->status != badPosition) && (p[1]->status != badPosition))
-		{
-			drawBoardToFile(outfile);
-		}
-		outfile.close();
-	}
-	else {
-		gotoxy(1, 28);
-		cout << "can't Create ouput file";
+	//ofstream outfile("output.txt");
+	//if (outfile.is_open())
+	//{
+	//	outfile << "Winner: " << winner << "\n";
+	//	outfile << "Reason: " ;
+	//	if (winner == 1)
+	//	{
+	//		outfile << p[1]->returnReason();
+	//		if (p[1]->status>2)
+	//			outfile  <<"for player 2 ";
+	//		if (p[1]->errorLine!=0)
+	//		{
+	//			outfile << "line " << p[1]->errorLine;
+	//		}
+	//	}
+	//	else if (winner == 2)
+	//	{
+	//		outfile << p[0]->returnReason();
+	//		if (p[0]->status>2)
+	//			outfile << "for player 1 ";
+	//		if (p[0]->errorLine!=0)
+	//		{
+	//			outfile << "line " << p[0]->errorLine;
+	//		}
+	//	}
+	//	else if (winner == 0)
+	//	{
+	//		if (p[0]->status == p[1]->status)
+	//		{
+	//			if (p[0]->status==badPosition)
+	//				outfile << "Bad Positioning input files for both players- player 1: line " << p[0]->errorLine << ", player 2: line " << p[1]->errorLine;
+	//			if ((p[0]->status == moveFilesDone) || (p[0]->status==flagsCaptured) || (p[0]->status==allEaten))
+	//				outfile << "A tie - both Moves input files done without a winner";
+	//		}
+	//		else
+	//		{
+	//			outfile << p[0]->returnReason();
+	//			if (p[0]->errorLine != 0)
+	//			{
+	//				outfile << " player 1 line " << p[0]->errorLine;
+	//			}
+	//			outfile << " and "<< p[1]->returnReason();
+	//			if (p[1]->errorLine != 0)
+	//			{
+	//				outfile << " player 2 line " << p[1]->errorLine;
+	//			}
+	//		}
+	//	}
+	//	outfile << "\n\n";
+	//	if ((p[0]->status != badPosition) && (p[1]->status != badPosition))
+	//	{
+	//		drawBoardToFile(outfile);
+	//	}
+	//	outfile.close();
+	//}
+	//else {
+	//	gotoxy(1, 28);
+	//	cout << "can't Create ouput file";
 
-	}
+	//}
 }
 void TheGame::drawBoardToFile(ofstream& outfile)
 {

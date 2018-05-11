@@ -47,14 +47,23 @@ public:
 	void removePiece(int i, int j);
 	Player();
 	~Player();
-	bool move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType);
+	virtual bool move(int& moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType) =0;
 	//void movePlayerError(int lineNum);  we need this?
 	void setPlayerStatus(Reason reason, Error theError);
+	//virtual bool readMove(int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType)=0;
 	void setColor(Color c) {
 		color = c;
 	}
-
+	bool checkForCorrectJokerType(const char& type);
+	bool checkMoveisLegal(const int& currX, const int& currY, const int& newX, const int& newY);
+	bool checkXYInRange(int num, char cord);
 	void printError();
 	string returnReason();
 	void hideJoker();
+	Error checkIfPieceCanMove(const char& type);
+	bool checkForCorrectType(const char& type);
+	bool readCurrentMove(string currentLine, Error err, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType);
+	Error validateMove(int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation);
+	string* parseLine(string line, int& size, Error err);
+	bool readCurrentStartLine(string currentLine, Error err, int& lenLine);
 };
