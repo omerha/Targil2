@@ -3,29 +3,31 @@
 
 void TheGame::init()//First function.
 {
-	p[0].setColor(YELLOW);
-	p[1].setColor(RED);
-	p[0].setInputFile("player1.rps_board");
-	p[0].setMoveFile("player1.rps_moves");
-	p[1].setInputFile("player2.rps_board");
-	p[1].setMoveFile("player2.rps_moves");
+
+	
+
 	bool goodToInitBoard = true;
 
 	for (int i = 0; i < this->numOfPlayers; i++)
 	{
-		p[i].readFromFile();
+		p[i] = new FilesPlayer();
 
-		if (p[i].status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
+		p[i]->getPlayerStartMoves();
+
+		if (p[i]->status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
 		{
-			p[i].checkValidityiPieces();
-			if (p[i].status != noReason)
+			p[i]->checkValidityiPieces();
+			if (p[i]->status != noReason)
 				goodToInitBoard = false;
 			if (showOnlyKnownInfo)
-				p[i].hideJoker();
+				p[i]->hideJoker();
 		}
 		else
 			goodToInitBoard = false;
 	}	
+	p[0]->setColor(YELLOW);
+	p[1]->setColor(RED);
+
 	if (goodToInitBoard)
 		initStartBoard();
 }
@@ -39,10 +41,10 @@ void TheGame::initStartBoard()
 	{
 		for (j = 1; j <= M; j++)
 		{
-			if ((p[0].playerBoard[i][j].getPieceType() != EMPTY_PIECE) && (p[1].playerBoard[i][j].getPieceType() != EMPTY_PIECE))
+			if ((p[0]->playerBoard[i][j].getPieceType() != EMPTY_PIECE) && (p[1]->playerBoard[i][j].getPieceType() != EMPTY_PIECE))
 			{
 				
-				res = pieceFight(p[0].playerBoard[i][j], p[1].playerBoard[i][j]);
+				res = pieceFight(p[0]->playerBoard[i][j], p[1]->playerBoard[i][j]);
 				updatePieceAfterFight(i, j, res);
 				setFightResult(res, i, j);
 			}
@@ -70,19 +72,19 @@ void TheGame::updatePieceAfterFight(int i, int j, int res)
 {
 	if (res == 0)
 	{
-		p[0].removePiece(i, j);
-		p[1].removePiece(i, j);
+		p[0]->removePiece(i, j);
+		p[1]->removePiece(i, j);
 		return;
 	}
 	
 	else if (res == 1)
 	{
-		p[1].removePiece(i, j);
+		p[1]->removePiece(i, j);
 		return;
 	}
 	else if (res == 2)
 	{
-		p[0].removePiece(i, j);
+		p[0]->removePiece(i, j);
 		return;
 	}
 
@@ -93,10 +95,10 @@ void TheGame::setFightResult(int fightResult, int xLoc, int yLoc)//Recevies figh
 	if (fightResult == 0) //It means that both players lost
 	{
 	//	gameBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0].playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0].playerBoard[xLoc][yLoc].setPieceJoker(false);
-		p[1].playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[1].playerBoard[xLoc][yLoc].setPieceJoker(false);
+		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
+		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
 	//	gameBoard[xLoc][yLoc].setPieceJoker(false);
 	
 	}
@@ -104,15 +106,15 @@ void TheGame::setFightResult(int fightResult, int xLoc, int yLoc)//Recevies figh
 	{
 		//gameBoard[xLoc][yLoc].setPieceType(p[0].playerBoard[xLoc][yLoc].getPieceType());
 		//gameBoard[xLoc][yLoc].setPieceJoker(p[0].playerBoard[xLoc][yLoc].getPieceJoker());
-		p[1].playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[1].playerBoard[xLoc][yLoc].setPieceJoker(false);
+		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
 	}
 	else if (fightResult == 2) //It means that player 2 wins in this square
 	{
 		//gameBoard[xLoc][yLoc].setPieceType(p[1].playerBoard[xLoc][yLoc].getPieceType());
 		//gameBoard[xLoc][yLoc].setPieceJoker(p[1].playerBoard[xLoc][yLoc].getPieceJoker());
-		p[0].playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0].playerBoard[xLoc][yLoc].setPieceJoker(false);
+		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
 	}
 }
 
@@ -121,7 +123,7 @@ void TheGame::checkForWinner()
 	int i,  numPlayer, counter = 0;
 	for (numPlayer = 0; numPlayer < numOfPlayers; numPlayer++)
 	{
-		if (p[numPlayer].status != noReason)
+		if (p[numPlayer]->status != noReason)
 		{
 			over = true;
 		}
@@ -130,37 +132,37 @@ void TheGame::checkForWinner()
 			counter = 0;
 			for (i = 0; i <= 3; i++)
 			{
-				counter += p[numPlayer].counterPieces[i];
+				counter += p[numPlayer]->counterPieces[i];
 			}
 			if (counter == 0)
 			{
-				p[numPlayer].status = allEaten;
+				p[numPlayer]->status = allEaten;
 				over = true;
 
 			}
-			if (p[numPlayer].counterPieces[F] == 0)
+			if (p[numPlayer]->counterPieces[F] == 0)
 			{
-				p[numPlayer].status = flagsCaptured;
+				p[numPlayer]->status = flagsCaptured;
 				over = true;
 			}
 		}
 	}
 	if (over)
 	{
-		if ((p[0].status != noReason) && (p[1].status != noReason))
+		if ((p[0]->status != noReason) && (p[1]->status != noReason))
 		{
-			if ((p[0].status == flagsCaptured) && (p[1].status != flagsCaptured))
+			if ((p[0]->status == flagsCaptured) && (p[1]->status != flagsCaptured))
 				winner = 2;
-			else if ((p[1].status == flagsCaptured) && (p[0].status != flagsCaptured))
+			else if ((p[1]->status == flagsCaptured) && (p[0]->status != flagsCaptured))
 				winner = 1;
 			else 
 				winner = 0;
 		}
-		if (p[0].status == noReason)
+		if (p[0]->status == noReason)
 		{
 			winner = 1;
 		}
-		if (p[1].status == noReason)
+		if (p[1]->status == noReason)
 		{
 			winner = 2;
 		}
@@ -177,7 +179,7 @@ void TheGame::printToScreen(bool start)
 	for (i = 0; i < numOfPlayers; i++)
 	{
 		cout << "\nThe Errors of player number " << i + 1 << ": ";
-		p[i].printError();
+		p[i]->printError();
 	}
 }
 
@@ -187,7 +189,7 @@ void TheGame::run()
 	bool start = false;
 	init();
 	checkForWinner();
-	if ((p[0].status!=badPosition)&& (p[1].status != badPosition))
+	if ((p[0]->status!=badPosition)&& (p[1]->status != badPosition))
 	{
 		start = true;
 		if (showMode != QUIET_MODE)
@@ -224,15 +226,15 @@ void TheGame::move(int moveNum)
 	int i;
 	int newX = 0, newY = 0, oldX = 0, oldY = 0, jokerX = 0, jokerY = 0;
 	char newJokerType = EMPTY_PIECE;
-	if ((p[0].numOfMoves < moveNum) && (p[1].numOfMoves < moveNum))
+	if ((p[0]->numOfMoves < moveNum) && (p[1]->numOfMoves < moveNum))
 	{
 		over = true;
-		p[0].status = p[1].status = moveFilesDone;
+		p[0]->status = p[1]->status = moveFilesDone;
 	}
 	for (i = 0; i < numOfPlayers && !over; i++)
 	{
 		newJokerType = EMPTY_PIECE;
-		if (p[i].move(moveNum, newX, newY, oldX, oldY, jokerX, jokerY, newJokerType))
+		if (p[i]->move(moveNum, newX, newY, oldX, oldY, jokerX, jokerY, newJokerType))
 		{
 			movePiece(oldX, oldY, newX, newY, i,jokerX,jokerY,newJokerType);
 		}
@@ -245,41 +247,41 @@ void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, co
 	
 	int secondPlayerIndex = abs(playerNum - 1);
 	int fightRes = -1;
-	//if (gameBoard[newX][newY].getPieceType() != EMPTY_PIECE)//there is a piece already in this place - fight!
-	if(p[secondPlayerIndex].playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
+	//if (gameBoard[newX][newY]->getPieceType() != EMPTY_PIECE)//there is a piece already in this place - fight!
+	if(p[secondPlayerIndex]->playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
 	{
-		fightRes = pieceFight(p[0].playerBoard[newX][newY], p[1].playerBoard[newX][newY]);
+		fightRes = pieceFight(p[0]->playerBoard[newX][newY], p[1]->playerBoard[newX][newY]);
 		setFightResult(fightRes, newX, newY);
 	}
 	else
 	{
-	//	gameBoard[newX][newY].setPieceType(gameBoard[oldX][oldY].getPieceType());
-		//gameBoard[newX][newY].setPieceJoker(p[playerNum].playerBoard[oldX][oldY].getPieceJoker());
+	//	gameBoard[newX][newY]->setPieceType(gameBoard[oldX][oldY].getPieceType());
+		//gameBoard[newX][newY]->setPieceJoker(p[playerNum].playerBoard[oldX][oldY].getPieceJoker());
 	}
-	//gameBoard[oldX][oldY].setPieceType(EMPTY_PIECE);
-	//gameBoard[oldX][oldY].setPieceJoker(false);
-	if (newJokerType != EMPTY_PIECE || p[playerNum].playerBoard[oldX][oldY].getPieceJoker())
+	//gameBoard[oldX][oldY]->setPieceType(EMPTY_PIECE);
+	//gameBoard[oldX][oldY]->setPieceJoker(false);
+	if (newJokerType != EMPTY_PIECE || p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())
 	{
-		if (p[playerNum].playerBoard[oldX][oldY].getPieceJoker())
+		if (p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())
 		{
-			p[playerNum].playerBoard[oldX][oldY].setPieceJoker(false);
+			p[playerNum]->playerBoard[oldX][oldY].setPieceJoker(false);
 			if (playerNum == fightRes - 1 || fightRes == -1)
 			{
-				p[playerNum].playerBoard[newX][newY].setPieceJoker(true);
-		//		gameBoard[newX][newY].setPieceJoker(true);
+				p[playerNum]->playerBoard[newX][newY].setPieceJoker(true);
+		//		gameBoard[newX][newY]->setPieceJoker(true);
 				if (newX == jokerX && newY == jokerY)
 				{
-					p[playerNum].playerBoard[newX][newY].setPieceType(newJokerType);
+					p[playerNum]->playerBoard[newX][newY].setPieceType(newJokerType);
 			//		gameBoard[newX][newY].setPieceType(newJokerType);
 				}
 			}
 		}
 		else {
-			//p[playerNum].playerBoard[jokerX][jokerY].setPieceJoker(true);
-			p[playerNum].playerBoard[jokerX][jokerY].setPieceType(newJokerType);
-			//gameBoard[jokerX][jokerY].setPieceType(newJokerType);
+			//p[playerNum]->playerBoard[jokerX][jokerY].setPieceJoker(true);
+			p[playerNum]->playerBoard[jokerX][jokerY].setPieceType(newJokerType);
+			//gameBoard[jokerX][jokerY]->setPieceType(newJokerType);
 			if (showMode == SHOWALL_MODE || showMode == playerNum && !showOnlyKnownInfo)
-				p[playerNum].playerBoard[jokerX][jokerY].drawPiece(p[playerNum].color, jokerX, jokerY);
+				p[playerNum]->playerBoard[jokerX][jokerY].drawPiece(p[playerNum]->color, jokerX, jokerY);
 		}
 	}
 	if (showMode != QUIET_MODE)
@@ -297,26 +299,26 @@ void TheGame::drawPiece(const int & oldX, const int & oldY, const int & newX, co
 		if (fightResult != -1) {
 			if (fightResult == TIE)
 			{
-				p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
-				p[secondPlayerIndex].playerBoard[newX][newY].removePiece(newX, newY);
+				p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
+				p[secondPlayerIndex]->playerBoard[newX][newY].removePiece(newX, newY);
 			}
 			else if (fightResult - 1 == playerNum)
 			{
-				p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
-				p[playerNum].playerBoard[newX][newY].drawPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
+				p[playerNum]->playerBoard[newX][newY].drawPiece(p[playerNum]->color, newX, newY);
 			}
 			else
 			{
-				p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
+				p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
 			}
 		}
 		else
 		{
-			p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
+			p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
 			if (showOnlyKnownInfo)
-				p[playerNum].playerBoard[newX][newY].drawUnknownPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[newX][newY].drawUnknownPiece(p[playerNum]->color, newX, newY);
 			else
-				p[playerNum].playerBoard[newX][newY].drawPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[newX][newY].drawPiece(p[playerNum]->color, newX, newY);
 		}
 	}
 	else if (showMode == playerNum)
@@ -324,27 +326,27 @@ void TheGame::drawPiece(const int & oldX, const int & oldY, const int & newX, co
 		if (fightResult != -1) {
 			if (fightResult - 1 == playerNum)
 			{
-				p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
-				p[playerNum].playerBoard[newX][newY].drawPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
+				p[playerNum]->playerBoard[newX][newY].drawPiece(p[playerNum]->color, newX, newY);
 			}
 			else
 			{
-				p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
+				p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
 			}
 		}
 		else
 		{
-			p[playerNum].playerBoard[oldX][oldY].removePiece(oldX, oldY);
+			p[playerNum]->playerBoard[oldX][oldY].removePiece(oldX, oldY);
 			if (showOnlyKnownInfo)
-				p[playerNum].playerBoard[newX][newY].drawUnknownPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[newX][newY].drawUnknownPiece(p[playerNum]->color, newX, newY);
 			else
-				p[playerNum].playerBoard[newX][newY].drawPiece(p[playerNum].color, newX, newY);
+				p[playerNum]->playerBoard[newX][newY].drawPiece(p[playerNum]->color, newX, newY);
 		}
 	}
 	else {
 		if (!(fightResult - 1 == secondPlayerIndex))
 		{
-			p[secondPlayerIndex].playerBoard[newX][newY].removePiece(newX, newY);
+			p[secondPlayerIndex]->playerBoard[newX][newY].removePiece(newX, newY);
 		}
 	}
 }
@@ -359,12 +361,12 @@ void TheGame::drawGameBoard()
 		{
 			for (int j =1; j <= M; j++)
 			{
-				if (p[player].playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+				if (p[player]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
 				{
 					if (showOnlyKnownInfo)
-						p[player].playerBoard[i][j].drawUnknownPiece(p[player].color, i, j);
+						p[player]->playerBoard[i][j].drawUnknownPiece(p[player]->color, i, j);
 					else
-						p[player].playerBoard[i][j].drawPiece(p[player].color, i, j);
+						p[player]->playerBoard[i][j].drawPiece(p[player]->color, i, j);
 				}
 			}
 		}
@@ -382,49 +384,49 @@ void TheGame::createOutputFile()
 		outfile << "Reason: " ;
 		if (winner == 1)
 		{
-			outfile << p[1].returnReason();
-			if (p[1].status>2)
+			outfile << p[1]->returnReason();
+			if (p[1]->status>2)
 				outfile  <<"for player 2 ";
-			if (p[1].errorLine!=0)
+			if (p[1]->errorLine!=0)
 			{
-				outfile << "line " << p[1].errorLine;
+				outfile << "line " << p[1]->errorLine;
 			}
 		}
 		else if (winner == 2)
 		{
-			outfile << p[0].returnReason();
-			if (p[0].status>2)
+			outfile << p[0]->returnReason();
+			if (p[0]->status>2)
 				outfile << "for player 1 ";
-			if (p[0].errorLine!=0)
+			if (p[0]->errorLine!=0)
 			{
-				outfile << "line " << p[0].errorLine;
+				outfile << "line " << p[0]->errorLine;
 			}
 		}
 		else if (winner == 0)
 		{
-			if (p[0].status == p[1].status)
+			if (p[0]->status == p[1]->status)
 			{
-				if (p[0].status==badPosition)
-					outfile << "Bad Positioning input files for both players- player 1: line " << p[0].errorLine << ", player 2: line " << p[1].errorLine;
-				if ((p[0].status == moveFilesDone) || (p[0].status==flagsCaptured) || (p[0].status==allEaten))
+				if (p[0]->status==badPosition)
+					outfile << "Bad Positioning input files for both players- player 1: line " << p[0]->errorLine << ", player 2: line " << p[1]->errorLine;
+				if ((p[0]->status == moveFilesDone) || (p[0]->status==flagsCaptured) || (p[0]->status==allEaten))
 					outfile << "A tie - both Moves input files done without a winner";
 			}
 			else
 			{
-				outfile << p[0].returnReason();
-				if (p[0].errorLine != 0)
+				outfile << p[0]->returnReason();
+				if (p[0]->errorLine != 0)
 				{
-					outfile << " player 1 line " << p[0].errorLine;
+					outfile << " player 1 line " << p[0]->errorLine;
 				}
-				outfile << " and "<< p[1].returnReason();
-				if (p[1].errorLine != 0)
+				outfile << " and "<< p[1]->returnReason();
+				if (p[1]->errorLine != 0)
 				{
-					outfile << " player 2 line " << p[1].errorLine;
+					outfile << " player 2 line " << p[1]->errorLine;
 				}
 			}
 		}
 		outfile << "\n\n";
-		if ((p[0].status != badPosition) && (p[1].status != badPosition))
+		if ((p[0]->status != badPosition) && (p[1]->status != badPosition))
 		{
 			drawBoardToFile(outfile);
 		}
@@ -443,19 +445,19 @@ void TheGame::drawBoardToFile(ofstream& outfile)
 				outfile << "|";
 				for (int i = 1; i < 11; i++)
 				{
-					if (p[0].playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+					if (p[0]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
 					{
-						if (p[0].playerBoard[i][j].getPieceJoker())
+						if (p[0]->playerBoard[i][j].getPieceJoker())
 							outfile << " " << 'j' << "  |";
 						else
-							outfile << " " << (char)(p[0].playerBoard[i][j].getPieceType()+32) << "  |";
+							outfile << " " << (char)(p[0]->playerBoard[i][j].getPieceType()+32) << "  |";
 					}
-					else if (p[1].playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+					else if (p[1]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
 					{
-						if (p[1].playerBoard[i][j].getPieceJoker())
+						if (p[1]->playerBoard[i][j].getPieceJoker())
 							outfile << " " << JOKER << "  |";
 						else
-							outfile << " " << p[1].playerBoard[i][j].getPieceType() << "  |";
+							outfile << " " << p[1]->playerBoard[i][j].getPieceType() << "  |";
 					}
 					else
 						outfile << "    |";
@@ -469,7 +471,7 @@ void TheGame::drawBoardLines()
 	{
 		for (int i = 1; i < 11; i++)
 		{
-			p[0].playerBoard[i][j].removePiece(i, j);
+			p[0]->playerBoard[i][j].removePiece(i, j);
 			if (j == 1)
 			{
 				gotoxy(i * 3 + 3, 4);

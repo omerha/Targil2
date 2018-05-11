@@ -1,6 +1,6 @@
 #pragma once
 #include "io_utils.h"
-#include "Player.h"
+#include "FilesPlayer.h"
 #include <string>
 #include <iostream>
 
@@ -13,7 +13,7 @@ using namespace std;
 class TheGame
 {
 	int numOfPlayers;
-	Player p[2];
+	Player* p[2];
 	int winner;
 //	Piece gameBoard[N+1][M+1]; //need to check if we actually need this board
 	int showMode;

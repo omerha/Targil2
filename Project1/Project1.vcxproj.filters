@@ -33,10 +33,10 @@
     <ClCompile Include="Arguments.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Files.cpp">
+    <ClCompile Include="keyBoardPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="keyBoardPlayer.cpp">
+    <ClCompile Include="FilesPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

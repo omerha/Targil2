@@ -116,7 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arguments.cpp" />
-    <ClCompile Include="Files.cpp" />
+    <ClCompile Include="FilesPlayer.cpp" />
     <ClCompile Include="io_utils.cpp" />
     <ClCompile Include="keyBoardPlayer.cpp" />
     <ClCompile Include="main.cpp" />

@@ -1,11 +1,11 @@
 #include "FilesPlayer.h"
+int FilesPlayer::currentNumPlayer = 0;
 
-
-void FilesPlayer::readMovesFile(string fileName)
+void FilesPlayer::readMovesFile()
 {
 	int numOfRows = 0;
 	string tmpReadFile;
-	ifstream inFile(fileName);
+	ifstream inFile(movesFile);
 	if (inFile.fail())
 	{
 		illegalFile = true;
@@ -136,8 +136,48 @@ bool FilesPlayer::readMove(int moveNum, int& newXLocation, int& newYLocation, in
 	}
 	delete[] currInput;
 }
+void FilesPlayer::getPlayerStartMoves()//This function reads the first file and checks for errors in
+{
+	currentNumPlayer++;
+	setInputFile("player"+to_string(currentNumPlayer)+".rps_board", "player" + to_string(currentNumPlayer) + ".rps_moves");
+	if (status != noReason)
+		return;
+	int numOfRows = 0, inputIndex = 0;
+	string tmpRead[10] = { "0" };
+	string getInput,tmp;
+	int index = 0;
+	ifstream inFile(this->startGameFile);
+	int xLocation, yLocation;
+	char type;
 
-void FilesPlayer::readFromFile(string fileName, Piece** playerBoard)
+	while (numOfRows < numOfStartMoves)
+	{
+		index = 0;
+		getInput = getCurrLine("inputFile", numOfRows);
+		stringstream chs(getInput);
+		
+		while (getline(chs, tmp, ' '))
+			tmpRead[index++] = tmp;
+		index = 0;
+		numOfRows++;
+		type = tmpRead[index++][0];
+		xLocation = stoi(tmpRead[index++]);
+		yLocation = stoi(tmpRead[index++]);
+		if (type == JOKER)
+		{
+			playerBoard[xLocation][yLocation].setPieceJoker(true);
+			countPieces(JOKER);
+			type = tmpRead[index++][0];
+			playerBoard[xLocation][yLocation].setPieceType(type);
+		}
+		else
+		{
+			playerBoard[xLocation][yLocation].setPieceType(type);
+			countPieces(type);
+		}
+	}
+}
+void FilesPlayer::getPlayerStartMoves(string fileName)
 {
 	ifstream inFile(fileName);
 	int numOfRows = 0, inputIndex = 0;
@@ -233,8 +273,7 @@ void FilesPlayer::readFromFile(string fileName, Piece** playerBoard)
 
 void FilesPlayer::setFileStatus(Reason reason, Error theError, int line)
 {
-	fileStatus = reason;
-	error = theError;
+	Player::setPlayerStatus(reason, theError);
 	errLine = line;
 }
 

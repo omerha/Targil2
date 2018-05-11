@@ -1,46 +1,44 @@
 #pragma once
 
-#include <string>
 #include <fstream>
 #include <sstream>
-#include "Error.h"
-#include "Reason.h"
-#include "Piece.h"
-//#include "Player.h"
+#include "Player.h"
 #define M 10 //colums
 #define N 10 // rows
 #define K 13 // The num of pieces of each player
 #define MAX_MOVES 100
 using namespace std;
-class FilesPlayer  {
+
+class FilesPlayer : public Player {
+	static int currentNumPlayer;
 	bool illegalFile = false;
 	int errLine = NULL;
-	Error error = noError;
-	Reason fileStatus = noReason;
+//	Error error = noError;
+//	Reason fileStatus = noReason;
 	ifstream inFile;
+	string startGameFile;
+	string movesFile;
 	string movesArr[MAX_MOVES];
 	string inputFile[MAX_MOVES];
 	int numOfMoves = 0;
 	int numOfStartMoves = 0;
+
 public:
-	void setInputFile(string fileName,Piece** playerBoard) 
+	FilesPlayer() : Player() {};
+	void setInputFile(string fileName,string moveFile)
 	{
-	ifstream inFile(fileName);
+		startGameFile = fileName;
+		movesFile = moveFile;
+		ifstream inFile(startGameFile);
 		if (inFile.fail())
 		{
 			illegalFile = true;
 		}
-		readFromFile(fileName, playerBoard);
+		getPlayerStartMoves(startGameFile);
+		if (status != noReason)
+			readMovesFile();
 	}
-	void setMoveFile(string fileName)
-	{
-		ifstream inFile(fileName);
-		if (inFile.fail())
-		{
-			illegalFile = true;
-		}
-		readMovesFile(fileName);
-	}
+
 	int getnumOfStartMoves()
 	{
 		return numOfStartMoves;
@@ -48,14 +46,6 @@ public:
 	int getnumOfMoves()
 	{
 		return numOfMoves;
-	}
-	Reason getFileStatus  ()const
-	{
-		return fileStatus;
-	}
-	Error getFileError() const
-	{
-		return error;
 	}
 	int getErrorLine() const
 	{
@@ -72,11 +62,11 @@ public:
 			return movesArr[rowNum];
 		}
 	}
-	void readMovesFile(string fileName);
+	void readMovesFile();
 	
 	bool readMove(int moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType,Piece** playerBoard);
-
-	void readFromFile(string fileName, Piece** playerBoard);
+	virtual void  getPlayerStartMoves() override;
+	void getPlayerStartMoves(string fileName);
 	void setFileStatus(Reason reason, Error theError, int line);
 	string* parseLine(string line, int& size, int lineNum, Error error);
 	bool checkXYInRange(int num, char cord);

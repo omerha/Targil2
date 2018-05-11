@@ -1,6 +1,6 @@
 #pragma once
-#include "FilesPlayer.h"
-class keyBoardPlayer
+#include "Player.h"
+class keyBoardPlayer : Player
 {
 public:
 
