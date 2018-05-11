@@ -36,7 +36,7 @@
     <ClCompile Include="Files.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="keyBoardInput.cpp">
+    <ClCompile Include="keyBoardPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +68,10 @@
     <ClInclude Include="Arguments.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Files.h">
+    <ClInclude Include="FilesPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="keyBoardInput.h">
+    <ClInclude Include="keyBoardPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -48,7 +48,7 @@ void Player::setPlayerStatus(Reason reason, Error theError, int line) //If error
 	errorLine = line;
 }
 
-void Player::setPlayerStatus(const Files& currFile)
+void Player::setPlayerStatus(const FilesPlayer& currFile)
 {
 	status = currFile.getFileStatus();
 	errorLine = currFile.getErrorLine();

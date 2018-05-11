@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Files.h"
+#include "FilesPlayer.h"
 #include "Piece.h"
 #include "Reason.h"
 #include "Error.h"
@@ -34,8 +34,8 @@ class Player
 	//string movesArr[100];
 	int numOfMoves = 0;
 	Color color;
-	Files startFile;
-	Files moveFile;
+	FilesPlayer startFile;
+	FilesPlayer moveFile;
 public:
 	void readFromFile();
 	void checkValidityiPieces();
@@ -46,7 +46,7 @@ public:
 	bool move(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType);
 	//void movePlayerError(int lineNum);  we need this?
 	void setPlayerStatus(Reason reason, Error theError, int line);
-	void setPlayerStatus(const Files& currFile);
+	void setPlayerStatus(const FilesPlayer& currFile);
 	void setColor(Color c) {
 		color = c;
 	}

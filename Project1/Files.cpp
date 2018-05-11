@@ -1,7 +1,7 @@
-#include "Files.h"
+#include "FilesPlayer.h"
 
 
-void Files::readMovesFile(string fileName)
+void FilesPlayer::readMovesFile(string fileName)
 {
 	int numOfRows = 0;
 	string tmpReadFile;
@@ -25,7 +25,7 @@ void Files::readMovesFile(string fileName)
 	numOfMoves = numOfRows;
 }
 
-bool Files::readMove(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType, Piece** playerBoard)
+bool FilesPlayer::readMove(int moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType, Piece** playerBoard)
 {
 
 	//This functino reads the move files and check for erros.
@@ -137,7 +137,7 @@ bool Files::readMove(int moveNum, int& newXLocation, int& newYLocation, int& old
 	delete[] currInput;
 }
 
-void Files::readFromFile(string fileName, Piece** playerBoard)
+void FilesPlayer::readFromFile(string fileName, Piece** playerBoard)
 {
 	ifstream inFile(fileName);
 	int numOfRows = 0, inputIndex = 0;
@@ -231,14 +231,14 @@ void Files::readFromFile(string fileName, Piece** playerBoard)
 	numOfStartMoves = numOfRows;
 }
 
-void Files::setFileStatus(Reason reason, Error theError, int line)
+void FilesPlayer::setFileStatus(Reason reason, Error theError, int line)
 {
 	fileStatus = reason;
 	error = theError;
 	errLine = line;
 }
 
-string * Files::parseLine(string line, int & size, int lineNum, Error error)
+string * FilesPlayer::parseLine(string line, int & size, int lineNum, Error error)
 {
 	string tmpRead, temp;
 	istringstream tempCh(line);
@@ -271,7 +271,7 @@ string * Files::parseLine(string line, int & size, int lineNum, Error error)
 }
 
 
-bool Files::checkXYInRange(int num, char cord)
+bool FilesPlayer::checkXYInRange(int num, char cord)
 {
 	if (cord == 'X')
 	{
@@ -290,7 +290,7 @@ bool Files::checkXYInRange(int num, char cord)
 	return true;
 }
 
-bool Files::checkForCorrectType(const char& type,const int& numOfRow)
+bool FilesPlayer::checkForCorrectType(const char& type,const int& numOfRow)
 {
 	if ((type != ROCK) && (type != PAPER) && (type != SCISSORS) && (type != BOMB) && (type != FLAG))
 	{
@@ -300,7 +300,7 @@ bool Files::checkForCorrectType(const char& type,const int& numOfRow)
 	return true;
 }
 
-bool Files::checkForCorrectJokerType(const char & type, const int & numOfRow)
+bool FilesPlayer::checkForCorrectJokerType(const char & type, const int & numOfRow)
 {
 	if ((type != ROCK) && (type != PAPER) && (type != SCISSORS) && (type != BOMB))
 	{
@@ -310,7 +310,7 @@ bool Files::checkForCorrectJokerType(const char & type, const int & numOfRow)
 	return true;
 }
 
-bool Files::checkMoveisLegal(const int & currX, const int & currY, const int & newX, const int & newY)
+bool FilesPlayer::checkMoveisLegal(const int & currX, const int & currY, const int & newX, const int & newY)
 {
 	if ((abs(currX - newX) > 1) || (abs(currY - newY) > 1))
 		return true;
@@ -320,7 +320,7 @@ bool Files::checkMoveisLegal(const int & currX, const int & currY, const int & n
 		return false;
 }
 
-bool Files::checkIfPieceCanMove(const char & type, const int & lineNum)
+bool FilesPlayer::checkIfPieceCanMove(const char & type, const int & lineNum)
 {
 	switch (type)
 	{
