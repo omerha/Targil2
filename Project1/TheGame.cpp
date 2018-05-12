@@ -4,13 +4,12 @@
 void TheGame::init()//First function.
 {
 
-	
-
 	bool goodToInitBoard = true;
 
 	for (int i = 0; i < this->numOfPlayers; i++)
 	{
-		p[i] = new FilesPlayer();
+		//p[i] = new FilesPlayer();
+		p[i] = new keyBoardPlayer();
 		p[i]->getPlayerStartMoves();
 		if (p[i]->status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
 		{

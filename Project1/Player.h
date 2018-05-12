@@ -14,8 +14,7 @@
 #define NUM_OF_BOMB 2
 #define NUM_OF_JOKER 2
 #define NUM_OF_FLAG 1
-
-
+#define _CRT_SECURE_NO_WARNINGS
 
 class Player
 {

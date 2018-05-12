@@ -21,5 +21,7 @@ enum Error
 	jokerNotInRange=16,
 	bombCantMove=17,
 	flagCantMove=18,
-	errorFile=19
+	errorFile=19,
+	wrongFormatRowInputConsole = 20,
+	wrongFrormatRowMoveConsole = 21
 };
