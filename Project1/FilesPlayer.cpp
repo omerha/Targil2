@@ -34,7 +34,8 @@ bool FilesPlayer::move(int& moveNum, int& newXLocation, int& newYLocation, int& 
 		{
 			if (moveNum == 1)
 				errLine = moveNum;
-			errLine = moveNum + 1;
+			else
+				errLine = moveNum + 1;
 			return false;
 		}
 		return true;
