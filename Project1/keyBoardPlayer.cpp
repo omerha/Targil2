@@ -30,8 +30,6 @@ void keyBoardPlayer::getPlayerStartMoves()
 			error = noError;
 		}
 	}
-
-	
 }
 
 bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType)
@@ -40,9 +38,9 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 	bool next = false;
 	while (!next)
 	{
-		cout << "Player " << playerNumber << " please enter your move\n";
-		cin.getline(tmpLine, 16);
-
+		gotoxy(37,3+playerNumber*2);
+		cout << "Player " << playerNumber << " please enter your move ";
+		cout << "\r" << flush;
 		next = readCurrentMove(tmpLine, wrongFrormatRowMoveFile, newXLocation, newYLocation, oldXLocation, oldYLocation, jokerXLocation, jokerYLocation, newJokerType);
 		if (!next)
 		{

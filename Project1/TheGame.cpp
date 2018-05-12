@@ -11,7 +11,7 @@ void TheGame::init()//First function.
 	int k;
 	bool goodToInitBoard = true;
 	if (typeid(*p[0]) == typeid(keyBoardPlayer))
-		k = 2; //it's need to be K
+		k = 3; //it's need to be K
 	else k = 1;
 
 	for (int j = 0; j < k; j++)
@@ -68,7 +68,6 @@ void TheGame::initStartBoard()
 				
 				res = pieceFight(p[0]->playerBoard[i][j], p[1]->playerBoard[i][j]);
 				updatePieceAfterFight(i, j, res);
-				setFightResult(res, i, j);
 			}
 			//else if (p[0].playerBoard[i][j].getPieceType() != EMPTY_PIECE)
 			//	this->gameBoard[i][j].setPieceType(p[0].playerBoard[i][j].getPieceType());
@@ -112,33 +111,33 @@ void TheGame::updatePieceAfterFight(int i, int j, int res)
 
 }
 
-void TheGame::setFightResult(int fightResult, int xLoc, int yLoc)//Recevies fight result and updates all board accordindly.
-{
-	if (fightResult == 0) //It means that both players lost
-	{
-	//	gameBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
-		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
-	//	gameBoard[xLoc][yLoc].setPieceJoker(false);
-	
-	}
-	if (fightResult == 1) ///It means that player 1 wins in this square
-	{
-		//gameBoard[xLoc][yLoc].setPieceType(p[0].playerBoard[xLoc][yLoc].getPieceType());
-		//gameBoard[xLoc][yLoc].setPieceJoker(p[0].playerBoard[xLoc][yLoc].getPieceJoker());
-		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
-	}
-	else if (fightResult == 2) //It means that player 2 wins in this square
-	{
-		//gameBoard[xLoc][yLoc].setPieceType(p[1].playerBoard[xLoc][yLoc].getPieceType());
-		//gameBoard[xLoc][yLoc].setPieceJoker(p[1].playerBoard[xLoc][yLoc].getPieceJoker());
-		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
-		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
-	}
-}
+//void TheGame::setFightResult(int fightResult, int xLoc, int yLoc)//Recevies fight result and updates all board accordindly.
+//{
+//	if (fightResult == 0) //It means that both players lost
+//	{
+//	//	gameBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+//		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+//		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
+//		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+//		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
+//	//	gameBoard[xLoc][yLoc].setPieceJoker(false);
+//	
+//	}
+//	if (fightResult == 1) ///It means that player 1 wins in this square
+//	{
+//		//gameBoard[xLoc][yLoc].setPieceType(p[0].playerBoard[xLoc][yLoc].getPieceType());
+//		//gameBoard[xLoc][yLoc].setPieceJoker(p[0].playerBoard[xLoc][yLoc].getPieceJoker());
+//		p[1]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+//		p[1]->playerBoard[xLoc][yLoc].setPieceJoker(false);
+//	}
+//	else if (fightResult == 2) //It means that player 2 wins in this square
+//	{
+//		//gameBoard[xLoc][yLoc].setPieceType(p[1].playerBoard[xLoc][yLoc].getPieceType());
+//		//gameBoard[xLoc][yLoc].setPieceJoker(p[1].playerBoard[xLoc][yLoc].getPieceJoker());
+//		p[0]->playerBoard[xLoc][yLoc].setPieceType(EMPTY_PIECE);
+//		p[0]->playerBoard[xLoc][yLoc].setPieceJoker(false);
+//	}
+//}
 
 void TheGame::checkForWinner() 
 {
@@ -257,7 +256,6 @@ void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, co
 	{
 		fightRes = pieceFight(p[0]->playerBoard[newX][newY], p[1]->playerBoard[newX][newY]);
 		updatePieceAfterFight(newX, newY, fightRes);
-		setFightResult(fightRes, newX, newY);
 	}
 	if (newJokerType != EMPTY_PIECE || p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())
 	{
@@ -466,6 +464,7 @@ void TheGame::drawBoardToFile(ofstream& outfile)
 }
 void TheGame::drawBoardLines()
 {
+	system("cls");
 	for (int j = 1; j < 11; j++)
 	{
 		for (int i = 1; i < 11; i++)

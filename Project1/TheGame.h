@@ -4,7 +4,7 @@
 #include "keyBoardPlayer.h"
 #include <string>
 #include <iostream>
-
+#include <stdlib.h>
 #define QUIET_MODE -1
 #define SHOWALL_MODE 2
 #define TIE 0
@@ -25,10 +25,8 @@ public:
 	void init();
 	void initStartBoard();
 	void run();
-	void run2();
 	void checkForWinner();
 	int pieceFight(Piece p1, Piece p2);
-	void setFightResult(int fightResult, int xLoc, int yLoc);
 	TheGame() 
 	{
 		winner = 0;

@@ -54,6 +54,7 @@ void Player::checkValidityiPieces()
 void Player::removePiece(int i, int j)
 {
 	char type = playerBoard[i][j].getPieceType();
+	playerBoard[i][j].setPieceJoker(false);
 	playerBoard[i][j].setPieceType(EMPTY_PIECE);
 	if (playerBoard[i][j].getPieceJoker())
 	{

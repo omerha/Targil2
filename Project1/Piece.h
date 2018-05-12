@@ -4,6 +4,7 @@ using namespace std;
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "io_utils.h"
 #include "Color.h"
 #define EMPTY_PIECE '-'
 #define BOMB 'B'
