@@ -1,4 +1,5 @@
 #pragma once
+#include<stdio.h>
 #include <string>
 #include "Piece.h"
 #include "Reason.h"
@@ -26,7 +27,7 @@ class Player
 	//std::string startGameFile; 
 //	std::string movesFile; 
 
-//	int errorLine;
+	
 	//string movesArr[100];
 //	int numOfMoves = 0;
 	Color color;
@@ -36,6 +37,8 @@ protected:
 	Reason status;
 	Piece** playerBoard;
 	Error error;
+	//int errorLine;
+	int playerNumber;
 public:
 	Piece** getPlayerBoard() {
 		return playerBoard;
@@ -56,7 +59,7 @@ public:
 	bool checkForCorrectJokerType(const char& type);
 	bool checkMoveisLegal(const int& currX, const int& currY, const int& newX, const int& newY);
 	bool checkXYInRange(int num, char cord);
-	void printError();
+	virtual void printError()=0;
 	string returnReason();
 	void hideJoker();
 	Error checkIfPieceCanMove(const char& type);

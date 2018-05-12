@@ -3,25 +3,50 @@
 
 void TheGame::init()//First function.
 {
-
+	//p[i] = new FilesPlayer();
+	p[0] = new keyBoardPlayer();
+	p[1] = new keyBoardPlayer();
+	p[0]->playerNumber = 1;
+	p[1]->playerNumber = 2;
+	int k;
 	bool goodToInitBoard = true;
+	if (typeid(*p[0]) == typeid(keyBoardPlayer))
+		k = 2; //it's need to be K
+	else k = 1;
 
+	for (int j = 0; j < k; j++)
+	{
+		for (int i = 0; i < this->numOfPlayers; i++)
+		{
+
+			p[i]->getPlayerStartMoves();
+			/*if (p[i]->status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
+			{
+				p[i]->checkValidityiPieces();
+				if (p[i]->status != noReason)
+					goodToInitBoard = false;
+				if (showOnlyKnownInfo)
+					p[i]->hideJoker();
+			}
+			else
+				goodToInitBoard = false;*/
+		}
+	}
 	for (int i = 0; i < this->numOfPlayers; i++)
 	{
-		//p[i] = new FilesPlayer();
-		p[i] = new keyBoardPlayer();
-		p[i]->getPlayerStartMoves();
 		if (p[i]->status == noReason) // NO Bad Positioning input file for player <player> - line <bad line number>
 		{
-			p[i]->checkValidityiPieces();
-			if (p[i]->status != noReason)
-				goodToInitBoard = false;
-			if (showOnlyKnownInfo)
-				p[i]->hideJoker();
+		p[i]->checkValidityiPieces();
+		if (p[i]->status != noReason)
+		goodToInitBoard = false;
+		if (showOnlyKnownInfo)
+		p[i]->hideJoker();
 		}
 		else
-			goodToInitBoard = false;
-	}	
+		goodToInitBoard = false;
+	}
+
+
 	p[0]->setColor(YELLOW);
 	p[1]->setColor(RED);
 
@@ -200,24 +225,6 @@ void TheGame::run()
 	createOutputFile();
 }
 
-void TheGame::run2()
-{
-	string tmpLine;
-	char jokerTypeTmp;
-	int i;
-	bool endOfInput1, endOfInput2;
-	for (i = 0; i < NUM_OF_PALYERS; i++)
-	{
-		cout << "Player " << i+1 << " please insert the piece type and the coordinates to locate the poece on the board\n";
-		getline(cin, tmpLine);
-		if (tmpLine[0] == 'J')
-		{
-			cout << "Player " << i + 1 << " [lease insert the initial representation of the joker\n";
-			jokerTypeTmp = getchar();
-		}	
-	}	
-}
-
 void TheGame::move(int moveNum)
 {
 	int i;
@@ -249,6 +256,7 @@ void TheGame::movePiece(const int & oldX, const int & oldY, const int & newX, co
 	if(p[secondPlayerIndex]->playerBoard[newX][newY].getPieceType() != EMPTY_PIECE)
 	{
 		fightRes = pieceFight(p[0]->playerBoard[newX][newY], p[1]->playerBoard[newX][newY]);
+		updatePieceAfterFight(newX, newY, fightRes);
 		setFightResult(fightRes, newX, newY);
 	}
 	if (newJokerType != EMPTY_PIECE || p[playerNum]->playerBoard[oldX][oldY].getPieceJoker())

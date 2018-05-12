@@ -13,6 +13,7 @@ class FilesPlayer : public Player {
 	static int currentNumPlayer;
 	bool illegalFile = false;
 	int errLine = NULL;
+	
 //	Error error = noError;
 //	Reason fileStatus = noReason;
 	ifstream inFile;
@@ -63,7 +64,7 @@ public:
 	virtual void  getPlayerStartMoves() override;
 	void getPlayerStartMoves(string fileName);
 	void setFileStatus(Reason reason, Error theError, int line);
-	
+	virtual void printError() override;
 
 	
 };
