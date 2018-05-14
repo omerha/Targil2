@@ -19,8 +19,9 @@ class TheGame
 //	Piece gameBoard[N+1][M+1]; //need to check if we actually need this board
 	int showMode;
 	int delayTime;
-	bool showOnlyKnownInfo;
+	bool showOnlyKnownInfo = false;
 	bool over;
+	bool consoleGame;
 public:
 	void init();
 	void initStartBoard();
@@ -34,7 +35,7 @@ public:
 		over = false;
 		showMode = 2;
 		delayTime = 50;
-		showOnlyKnownInfo = false;
+		showOnlyKnownInfo;
 	};
 	void move(int moveNum);
 	void movePiece(const int& oldX, const int& oldY, const int& newX, const int& newY,const int& playerNum,const int& jokerX,const int& jokerY,const char& newJokerType);
@@ -54,6 +55,10 @@ public:
 	void setUnkownInfoMode(bool unkownInfoMode)
 	{
 		showOnlyKnownInfo = unkownInfoMode;
+	}
+	void setConsoleGame(bool console)
+	{
+		consoleGame = console;
 	}
 	void drawBoardLines();
 	void updatePieceAfterFight(int i, int j, int res);

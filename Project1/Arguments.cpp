@@ -6,10 +6,12 @@ void argumentsToMain(int argc, char* argv[], TheGame &game)
 	int i;
 	bool  showOnlyKnownInfo = false;
 	int playerShow = 3, timeToDelay = 0;
-	bool legal = true;
+	bool legal = true,consoleGame = false;
 	for (i = 1; i < argc && legal; i++)
 	{
-		if (!strcmp(argv[i], "-quiet"))
+		if (!strcmp(argv[i], "-console"))
+			consoleGame = true;
+		else if (!strcmp(argv[i], "-quiet"))
 			playerShow = 0;
 		else if (!strcmp(argv[i], "-show-all"))
 			playerShow = 3;
@@ -49,6 +51,7 @@ void argumentsToMain(int argc, char* argv[], TheGame &game)
 			game.setDelayMode(timeToDelay);
 		game.setShowMode(playerShow);
 		game.setUnkownInfoMode(showOnlyKnownInfo);
+		game.setConsoleGame(consoleGame);
 	}
 }
 

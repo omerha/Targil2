@@ -4,16 +4,24 @@
 void TheGame::init()//First function.
 {
 	//p[i] = new FilesPlayer();
-	p[0] = new keyBoardPlayer();
-	p[1] = new keyBoardPlayer();
-	p[0]->playerNumber = 1;
-	p[1]->playerNumber = 2;
+
+
 	int k;
 	bool goodToInitBoard = true;
-	if (typeid(*p[0]) == typeid(keyBoardPlayer))
+	if (consoleGame == true)
+	{
+		p[0] = new keyBoardPlayer();
+		p[1] = new keyBoardPlayer();
 		k = 3; //it's need to be K
-	else k = 1;
-
+	}
+	else 
+	{
+		k = 1;
+		p[0] = new FilesPlayer();
+		p[1] = new FilesPlayer();
+	}
+	p[0]->playerNumber = 1;
+	p[1]->playerNumber = 2;
 	for (int j = 0; j < k; j++)
 	{
 		for (int i = 0; i < this->numOfPlayers; i++)
