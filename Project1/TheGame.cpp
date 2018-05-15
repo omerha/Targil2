@@ -228,8 +228,10 @@ void TheGame::run()
 	{
 		move(moveNum++);
 	}
+	if (typeid(*p[0]) == typeid(FilesPlayer))
+		((FilesPlayer*)p[0])->createOutputFile(p, winner);
 	printToScreen(start);
-	createOutputFile();
+
 }
 
 void TheGame::move(int moveNum)
@@ -378,98 +380,6 @@ void TheGame::drawGameBoard()
 	}
 }
 
-
-
-void TheGame::createOutputFile()
-{
-	//ofstream outfile("output.txt");
-	//if (outfile.is_open())
-	//{
-	//	outfile << "Winner: " << winner << "\n";
-	//	outfile << "Reason: " ;
-	//	if (winner == 1)
-	//	{
-	//		outfile << p[1]->returnReason();
-	//		if (p[1]->status>2)
-	//			outfile  <<"for player 2 ";
-	//		if (p[1]->errorLine!=0)
-	//		{
-	//			outfile << "line " << p[1]->errorLine;
-	//		}
-	//	}
-	//	else if (winner == 2)
-	//	{
-	//		outfile << p[0]->returnReason();
-	//		if (p[0]->status>2)
-	//			outfile << "for player 1 ";
-	//		if (p[0]->errorLine!=0)
-	//		{
-	//			outfile << "line " << p[0]->errorLine;
-	//		}
-	//	}
-	//	else if (winner == 0)
-	//	{
-	//		if (p[0]->status == p[1]->status)
-	//		{
-	//			if (p[0]->status==badPosition)
-	//				outfile << "Bad Positioning input files for both players- player 1: line " << p[0]->errorLine << ", player 2: line " << p[1]->errorLine;
-	//			if ((p[0]->status == moveFilesDone) || (p[0]->status==flagsCaptured) || (p[0]->status==allEaten))
-	//				outfile << "A tie - both Moves input files done without a winner";
-	//		}
-	//		else
-	//		{
-	//			outfile << p[0]->returnReason();
-	//			if (p[0]->errorLine != 0)
-	//			{
-	//				outfile << " player 1 line " << p[0]->errorLine;
-	//			}
-	//			outfile << " and "<< p[1]->returnReason();
-	//			if (p[1]->errorLine != 0)
-	//			{
-	//				outfile << " player 2 line " << p[1]->errorLine;
-	//			}
-	//		}
-	//	}
-	//	outfile << "\n\n";
-	//	if ((p[0]->status != badPosition) && (p[1]->status != badPosition))
-	//	{
-	//		drawBoardToFile(outfile);
-	//	}
-	//	outfile.close();
-	//}
-	//else {
-	//	gotoxy(1, 28);
-	//	cout << "can't Create ouput file";
-
-	//}
-}
-void TheGame::drawBoardToFile(ofstream& outfile)
-{
-	for (int j = 1; j < 11; j++)
-			{
-				outfile << "|";
-				for (int i = 1; i < 11; i++)
-				{
-					if (p[0]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
-					{
-						if (p[0]->playerBoard[i][j].getPieceJoker())
-							outfile << " " << 'j' << "  |";
-						else
-							outfile << " " << (char)(p[0]->playerBoard[i][j].getPieceType()+32) << "  |";
-					}
-					else if (p[1]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
-					{
-						if (p[1]->playerBoard[i][j].getPieceJoker())
-							outfile << " " << JOKER << "  |";
-						else
-							outfile << " " << p[1]->playerBoard[i][j].getPieceType() << "  |";
-					}
-					else
-						outfile << "    |";
-				}
-				outfile << "\n";
-			}
-}
 void TheGame::drawBoardLines()
 {
 	system("cls");

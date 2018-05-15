@@ -65,6 +65,7 @@ public:
 	void getPlayerStartMoves(string fileName);
 	void setFileStatus(Reason reason, Error theError, int line);
 	virtual void printError() override;
-
+	void createOutputFile(Player** p,int winner);
+	void drawBoardToFile(ofstream& outfile, Player** p);
 	
 };

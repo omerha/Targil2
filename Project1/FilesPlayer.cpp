@@ -182,5 +182,97 @@ void FilesPlayer::printError()
 	}
 }
 
+void FilesPlayer::createOutputFile(Player ** p,int winner)
+{
+	ofstream outfile("output.txt");
+	if (outfile.is_open())
+	{
+		outfile << "Winner: " << winner << "\n";
+		outfile << "Reason: " ;
+		if (winner == 1)
+		{
+			outfile << p[1]->returnReason();
+			if (p[1]->getStatus()>2)
+				outfile  <<"for player 2 ";
+			if (((FilesPlayer*)p[1])->errLine!=0)
+			{
+				outfile << "line " << ((FilesPlayer*)p[1])->errLine;
+			}
+		}
+		else if (winner == 2)
+		{
+			outfile << p[0]->returnReason();
+			if (p[0]->getStatus()>2)
+				outfile << "for player 1 ";
+			if (((FilesPlayer*)p[0])->errLine!=0)
+			{
+				outfile << "line " << ((FilesPlayer*)p[0])->errLine;
+			}
+		}
+		else if (winner == 0)
+		{
+			if (p[0]->getStatus() == p[1]->getStatus())
+			{
+				if (p[0]->getStatus() ==badPosition)
+					outfile << "Bad Positioning input files for both players- player 1: line " << ((FilesPlayer*)p[0]) << ", player 2: line " << ((FilesPlayer*)p[1]);
+				if ((p[0]->getStatus() == moveFilesDone) || (p[0]->getStatus() ==flagsCaptured) || (p[0]->getStatus() ==allEaten))
+					outfile << "A tie - both Moves input files done without a winner";
+			}
+			else
+			{
+				outfile << p[0]->returnReason();
+				if (((FilesPlayer*)p[0])->errLine != 0)
+				{
+					outfile << " player 1 line " << ((FilesPlayer*)p[0]);
+				}
+				outfile << " and "<< p[1]->returnReason();
+				if (((FilesPlayer*)p[0]) != 0)
+				{
+					outfile << " player 2 line " << ((FilesPlayer*)p[0]);
+				}
+			}
+		}
+		outfile << "\n\n";
+		if ((p[0]->getStatus() != badPosition) && (p[1]->getStatus() != badPosition))
+		{
+			drawBoardToFile(outfile,p);
+		}
+		outfile.close();
+	}
+	else {
+		gotoxy(1, 28);
+		cout << "can't Create ouput file";
+
+	}
+}
+
+void FilesPlayer::drawBoardToFile(ofstream & outfile, Player ** p)
+{
+	for (int j = 1; j < 11; j++)
+	{
+		outfile << "|";
+		for (int i = 1; i < 11; i++)
+		{
+			if (((FilesPlayer*)p[0])->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+			{
+				if (((FilesPlayer*)p[0])->playerBoard[i][j].getPieceJoker())
+					outfile << " " << 'j' << "  |";
+				else
+					outfile << " " << (char)(((FilesPlayer*)p[0])->playerBoard[i][j].getPieceType() + 32) << "  |";
+			}
+			else if (((FilesPlayer*)p[1])->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+			{
+				if (((FilesPlayer*)p[1])->playerBoard[i][j].getPieceJoker())
+					outfile << " " << JOKER << "  |";
+				else
+					outfile << " " << ((FilesPlayer*)p[1])->playerBoard[i][j].getPieceType() << "  |";
+			}
+			else
+				outfile << "    |";
+		}
+		outfile << "\n";
+	}
+}
+
 
 

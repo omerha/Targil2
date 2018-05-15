@@ -41,8 +41,6 @@ public:
 	void movePiece(const int& oldX, const int& oldY, const int& newX, const int& newY,const int& playerNum,const int& jokerX,const int& jokerY,const char& newJokerType);
 	void drawPiece(const int & oldX, const int & oldY, const int & newX, const int & newY, int playerNum, int fightResult);
 	void drawGameBoard();
-	void createOutputFile();
-	void drawBoardToFile(ofstream& outfile);
 	void printToScreen(bool start);
 	void setShowMode(int whoToShow)// 2 is all 1 is player 2 0 is player 1 and -1 is none aka quiet.
 	{

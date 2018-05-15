@@ -43,6 +43,9 @@ public:
 	Piece** getPlayerBoard() {
 		return playerBoard;
 	}
+	Reason getStatus() {
+		return status;
+	}
 	virtual void getPlayerStartMoves() =0;
 	void checkValidityiPieces();
 	void countPieces(char type);
