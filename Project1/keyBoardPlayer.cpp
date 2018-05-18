@@ -41,6 +41,7 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 		gotoxy(37,3+playerNumber*2);
 		cout << "Player " << playerNumber << " please enter your move ";
 		cout << "\r" << flush;
+		cin.getline(tmpLine, 16);
 		next = readCurrentMove(tmpLine, wrongFrormatRowMoveFile, newXLocation, newYLocation, oldXLocation, oldYLocation, jokerXLocation, jokerYLocation, newJokerType);
 		if (!next)
 		{

@@ -29,7 +29,7 @@ void Piece::drawPiece(Color color, int xL, int yL)
 		setTextColor(color);
 	gotoxy(xL * 3+3, yL * 2+3);
 	cout << pieceType;
-	revealType = true;
+	//revealType = true;
 }
 
 void Piece::drawUnknownPiece(Color color, int xL, int yL)

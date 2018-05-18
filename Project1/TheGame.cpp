@@ -234,11 +234,19 @@ void TheGame::run()
 
 }
 
+TheGame::~TheGame()
+{
+	for (int i = 0; i < numOfPlayers; i++) {
+		delete[] p[i];
+	}
+}
+
 void TheGame::move(int moveNum)
 {
 	int i;
 	int newX = 0, newY = 0, oldX = 0, oldY = 0, jokerX = 0, jokerY = 0;
 	char newJokerType = EMPTY_PIECE;
+	int secondPlayerIndex;
 	if (typeid(*p[0]) == typeid(FilesPlayer)) {
 		if ((((FilesPlayer*)p[0])->getnumOfMoves() < moveNum) && (((FilesPlayer*)p[1])->getnumOfMoves() < moveNum))
 		{
@@ -248,6 +256,12 @@ void TheGame::move(int moveNum)
 	}
 	for (i = 0; i < numOfPlayers && !over; i++)
 	{
+		secondPlayerIndex = abs(i - 1);
+		if (consoleGame == true ||  (showMode == i ))
+		{
+			
+				drawGameBoardForSinglePlayer(i, secondPlayerIndex);
+		}
 		newJokerType = EMPTY_PIECE;
 		if (p[i]->move(moveNum, newX, newY, oldX, oldY, jokerX, jokerY, newJokerType))
 		{
@@ -378,6 +392,27 @@ void TheGame::drawGameBoard()
 			}
 		}
 	}
+}
+
+void TheGame::drawGameBoardForSinglePlayer(int currentPlayer, int unknownPlayer)
+{
+	drawBoardLines();
+	
+	for (int i = 1; i <= N; i++)
+	{
+		for (int j = 1; j <= M; j++)
+		{
+			if (p[currentPlayer]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+			{
+				p[currentPlayer]->playerBoard[i][j].drawPiece(p[currentPlayer]->color, i, j);
+			}
+			else if(p[unknownPlayer]->playerBoard[i][j].getPieceType() != EMPTY_PIECE)
+			{
+				p[unknownPlayer]->playerBoard[i][j].drawUnknownPiece(p[unknownPlayer]->color, i, j);
+			}
+		}
+	}
+	
 }
 
 void TheGame::drawBoardLines()

@@ -51,7 +51,7 @@ public:
 	void countPieces(char type);
 	void removePiece(int i, int j);
 	Player();
-	~Player();
+	virtual ~Player();
 	virtual bool move(int& moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType) =0;
 	//void movePlayerError(int lineNum);  we need this?
 	void setPlayerStatus(Reason reason, Error theError);

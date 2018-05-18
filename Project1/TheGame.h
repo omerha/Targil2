@@ -37,6 +37,7 @@ public:
 		delayTime = 50;
 		showOnlyKnownInfo;
 	};
+	~TheGame();
 	void move(int moveNum);
 	void movePiece(const int& oldX, const int& oldY, const int& newX, const int& newY,const int& playerNum,const int& jokerX,const int& jokerY,const char& newJokerType);
 	void drawPiece(const int & oldX, const int & oldY, const int & newX, const int & newY, int playerNum, int fightResult);
@@ -58,6 +59,7 @@ public:
 	{
 		consoleGame = console;
 	}
+	void drawGameBoardForSinglePlayer(int currentPlayer, int unknownPlayer);
 	void drawBoardLines();
 	void updatePieceAfterFight(int i, int j, int res);
 };

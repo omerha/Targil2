@@ -25,7 +25,6 @@ class FilesPlayer : public Player {
 	int numOfStartMoves = 0;
 	int currentMove = 0;
 public:
-	FilesPlayer() : Player() {};
 	void setInputFile(string fileName,string moveFile)
 	{
 		startGameFile = fileName;
@@ -59,7 +58,6 @@ public:
 		}
 	}
 	void readMovesFile();
-	
 	virtual bool move(int& moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType) override;
 	virtual void  getPlayerStartMoves() override;
 	void getPlayerStartMoves(string fileName);
