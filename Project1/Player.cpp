@@ -292,6 +292,8 @@ bool Player::readCurrentStartLine(string currentLine, Error err,int& lenLine)
 	if ((inputIndex == 3) || (inputIndex == 4))
 	{
 		type = getInput[index][index];
+		if (islower(type))
+			type = toupper(type);
 		if (isdigit(getInput[1][0]) && isdigit(getInput[2][0]))
 		{
 			xLocation = stoi(getInput[++index]);
@@ -325,6 +327,8 @@ bool Player::readCurrentStartLine(string currentLine, Error err,int& lenLine)
 		if (type == JOKER)
 		{
 			type = getInput[++index][0];
+			if (islower(type))
+				type = toupper(type);
 			if (!(checkForCorrectJokerType(type)))
 			{
 				setPlayerStatus(badPosition, unKnownPieceForJoker);
@@ -406,6 +410,8 @@ bool Player::readCurrentMove(string currentLine, Error err, int & newXLocation, 
 					return false;
 				}
 				nJokerType = currInput[7][0];
+				if (islower(nJokerType))
+					nJokerType = toupper(nJokerType);
 				if (!(checkXYInRange(xJoker, 'X') && checkXYInRange(yJoker, 'Y')))//Something is wrong with joker xy coordinates
 				{
 					setPlayerStatus(badMoves, jokerNotInRange);
