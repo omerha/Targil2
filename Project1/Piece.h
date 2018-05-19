@@ -100,4 +100,7 @@ public:
 	void drawUnknownPiece(Color color, int xL, int yL);
 	bool operator > (const Piece &p) ;
 	bool operator == (const Piece &p) ;
+	bool operator < (const Piece &p);
+	friend ostream& operator<< (ostream& out, const Piece& p);
+	const Piece& operator = (const Piece & p);
 };

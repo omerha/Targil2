@@ -93,7 +93,7 @@ int TheGame::pieceFight(Piece p1, Piece p2)
 		return 0;
 	else if (p1 > p2)
 		return 1;
-	else 
+	else if (p1 < p2)
 		return 2;	
 }
 

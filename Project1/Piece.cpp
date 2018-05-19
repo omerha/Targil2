@@ -4,7 +4,8 @@
 void Piece::drawPiece(int xL, int yL)
 {
 	gotoxy(xL*3+3, yL*2+3);
-	cout << pieceType;
+	cout << *this;
+	//cout << pieceType;
 }
 
 void Piece::removePiece(int xL, int yL)
@@ -28,8 +29,10 @@ void Piece::drawPiece(Color color, int xL, int yL)
 	else
 		setTextColor(color);
 	gotoxy(xL * 3+3, yL * 2+3);
-	cout << pieceType;
+	cout << *this;
+	//cout << pieceType;
 	//revealType = true;
+
 }
 
 void Piece::drawUnknownPiece(Color color, int xL, int yL)
@@ -37,7 +40,8 @@ void Piece::drawUnknownPiece(Color color, int xL, int yL)
 	setTextColor(color);
 	gotoxy(xL * 3+3, yL * 2+3);
 	if (revealType)
-		cout << pieceType;
+		cout << *this;
+		//cout << pieceType;
 	else
 		cout << UNKNOWN_PIECE;
 }
@@ -98,7 +102,25 @@ bool Piece::operator==(const Piece & p)
 	return false;
 }
 
+bool Piece::operator<(const Piece & p)
+{
+	return (!(*this > p));
+}
 
+const Piece & Piece::operator=(const Piece & p)
+{
+	if (this != &p)
+	{
+		pieceType = p.pieceType;
+		joker = p.joker;
+		revealType = p.revealType;
+		revealJoker = p.revealJoker;
+	}
+	return *this;
+}
 
-
-
+ostream & operator<<(ostream & out, const Piece & p)
+{
+	out << p.pieceType;
+	return out;
+}
