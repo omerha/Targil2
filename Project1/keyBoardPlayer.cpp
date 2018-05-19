@@ -40,7 +40,9 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 	int x = 0, y = 0;
 	while (!next)
 	{
-		gotoxy(37, 3 + playerNumber * 2);
+		//gotoxy(37, 3 + playerNumber * 2);
+		gotoxy(0, 25);
+		setTextColor(WHITE);
 		cout << "Player " << playerNumber << " please enter your move " << endl;
 		getline(cin, tmpLine);
 		while (tmpLine.empty())

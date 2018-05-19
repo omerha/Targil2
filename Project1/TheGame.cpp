@@ -222,7 +222,10 @@ void TheGame::run()
 	{
 		start = true;
 		if (showMode != QUIET_MODE)
-		drawGameBoard();
+		{
+			drawGameBoard();
+		}
+
 	}
 	while (!over)
 	{

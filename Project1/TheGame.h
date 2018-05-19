@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+
 #define QUIET_MODE -1
 #define SHOWALL_MODE 2
 #define TIE 0
