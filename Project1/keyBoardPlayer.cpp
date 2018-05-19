@@ -1,25 +1,25 @@
 #include "keyBoardPlayer.h"
-#define _CRT_SECURE_NO_WARNINGS
+
 
 void keyBoardPlayer::getPlayerStartMoves()
 {
-	char tmpLine[9];
-	char jokerTypeTmp[2];
 	int i;
 	bool next = false;
+	string tmpLine, jokerTypeTmp;
 	while (!next)
 	{
 		cout << "Player " << playerNumber << " please insert piece type and the coordinates to locate the piece on the board\n";
-		//getline(cin, tmpLine2);
-		cin.getline(tmpLine, 9);
-		//cout << tmpLine<<endl;
+
+		getline(cin, tmpLine);
+		while (tmpLine.empty())
+			getline(cin, tmpLine);
 		if (tmpLine[0] == 'J')
 		{
-			cout << "Please insert the initial representation for the joker\n";
-			cin.getline(jokerTypeTmp, 2);
-			//cout << jokerTypeTmp << endl;
-			strcat_s(tmpLine,7, " ");
-			strcat_s(tmpLine,9, jokerTypeTmp);
+			cout << "Please insert the initial representation for the joker" << endl;
+			getline(cin, jokerTypeTmp);
+			while (jokerTypeTmp.empty())
+				getline(cin, jokerTypeTmp);
+			tmpLine = tmpLine + " " + jokerTypeTmp;
 			//cout << tmpLine << endl;
 		}
 		next = readCurrentStartLine(tmpLine, wrongFormatRowInputConsole, i);
@@ -34,14 +34,47 @@ void keyBoardPlayer::getPlayerStartMoves()
 
 bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType)
 {
-	char tmpLine[16];
+	char isJokerChange;
+	string tmpLine, tmpLine2, tmpLine3;
 	bool next = false;
+	int x = 0, y = 0;
 	while (!next)
 	{
-		gotoxy(37,3+playerNumber*2);
-		cout << "Player " << playerNumber << " please enter your move ";
+		gotoxy(37, 3 + playerNumber * 2);
+		cout << "Player " << playerNumber << " please enter your move " << endl;
+		getline(cin, tmpLine);
+		while (tmpLine.empty())
+			getline(cin, tmpLine);
+		if (counterPieces[J] >= 1)
+		{
+			cout << "Player " << playerNumber << " do you wants to change the joker representation? (Y/N) " << endl;
+			isJokerChange = getchar();
+			if ((isJokerChange == 'Y') || (isJokerChange == 'y'))
+			{
+				if (counterPieces[J] > 1)
+				{
+					cout << "Player " << playerNumber << " which joker do you want to change? " << endl;
+					getline(cin, tmpLine2);
+					while (tmpLine2.empty())
+						getline(cin, tmpLine2);
+				}
+				else // there is just 1 joker alive
+				{
+					findJoker(x, y);
+					tmpLine2 = to_string(x) + " " + to_string(y);
+				}
+				cout << "Player " << playerNumber << " to which represent you want to change the joker? " << endl;
+
+				getline(cin, tmpLine3);
+				while (tmpLine3.empty())
+					getline(cin, tmpLine3);
+				tmpLine = tmpLine + " J: " + tmpLine2 + " " + tmpLine3;
+				//cout << tmpLine << endl;
+			}
+		}
+
+
 		cout << "\r" << flush;
-		cin.getline(tmpLine, 16);
 		next = readCurrentMove(tmpLine, wrongFrormatRowMoveFile, newXLocation, newYLocation, oldXLocation, oldYLocation, jokerXLocation, jokerYLocation, newJokerType);
 		if (!next)
 		{
@@ -133,5 +166,23 @@ void keyBoardPlayer::printError()
 		else
 			cout << "There are no errors for this player\n";
 		break;
+	}
+}
+
+void keyBoardPlayer::findJoker(int & x, int & y)
+{
+	int i, j;
+	for (i = 0; i < M; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			if (playerBoard[i + 1][j + 1].getPieceJoker())
+			{
+				x = i + 1;
+				y = j + 1;
+				return;
+			}
+
+		}
 	}
 }

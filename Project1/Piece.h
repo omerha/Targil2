@@ -6,6 +6,7 @@ using namespace std;
 #include <sstream>
 #include "io_utils.h"
 #include "Color.h"
+
 #define EMPTY_PIECE '-'
 #define BOMB 'B'
 #define JOKER 'J'
@@ -15,6 +16,7 @@ using namespace std;
 #define PAPER 'P'
 #define UNKNOWN_PIECE "U"
 #define NUM_OF_PIECES_TYPE 6
+
 enum Pieces
 {
 	R = 0,
@@ -91,7 +93,6 @@ public:
 	{
 		return revealType;
 	}
-
 
 	void drawPiece(int xL,int yL);
 	void removePiece(int xL, int yL);

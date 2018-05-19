@@ -22,7 +22,7 @@ class Player
 	friend class TheGame;
 	//Piece playerBoard[N+1][M+1];
 	
-	int counterPieces[6];
+	
 	
 	//std::string startGameFile; 
 //	std::string movesFile; 
@@ -34,6 +34,7 @@ class Player
 //	FilesPlayer startFile;
 //	FilesPlayer moveFile;
 protected:
+	int counterPieces[6];
 	Reason status;
 	Piece** playerBoard;
 	Error error;
