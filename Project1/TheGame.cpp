@@ -90,7 +90,7 @@ void TheGame::initStartBoard()
 int TheGame::pieceFight(Piece p1, Piece p2)
 {  // The function gets two objects of Pieces and returns 0 if a tie, 1 if the first player wins, and 2 if the second player wins
 	if (p1 == p2)
-		return 0;
+		return TIE;
 	else if (p1 > p2)
 		return 1;
 	else if (p1 < p2)
@@ -99,7 +99,7 @@ int TheGame::pieceFight(Piece p1, Piece p2)
 
 void TheGame::updatePieceAfterFight(int i, int j, int res)
 {
-	if (res == 0)
+	if (res == TIE)
 	{
 		p[0]->removePiece(i, j);
 		p[1]->removePiece(i, j);
@@ -108,11 +108,13 @@ void TheGame::updatePieceAfterFight(int i, int j, int res)
 	
 	else if (res == 1)
 	{
+		p[0]->playerBoard[i][j].setRevealType(true);
 		p[1]->removePiece(i, j);
 		return;
 	}
 	else if (res == 2)
 	{
+		p[1]->playerBoard[i][j].setRevealType(true);
 		p[0]->removePiece(i, j);
 		return;
 	}
@@ -420,6 +422,7 @@ void TheGame::drawGameBoardForSinglePlayer(int currentPlayer, int unknownPlayer)
 
 void TheGame::drawBoardLines()
 {
+	setTextColor(WHITE);
 	system("cls");
 	for (int j = 1; j < 11; j++)
 	{

@@ -78,6 +78,11 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 
 		cout << "\r" << flush;
 		next = readCurrentMove(tmpLine, wrongFrormatRowMoveFile, newXLocation, newYLocation, oldXLocation, oldYLocation, jokerXLocation, jokerYLocation, newJokerType);
+		if (oldXLocation == jokerXLocation && oldYLocation == jokerYLocation)
+		{
+			jokerXLocation = newXLocation;
+			jokerYLocation = newYLocation;
+		}
 		if (!next)
 		{
 			printError();
