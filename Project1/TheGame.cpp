@@ -203,8 +203,13 @@ void TheGame::checkForWinner()
 void TheGame::printToScreen(bool start)
 {
 	int i;
-	if (start&& showMode != QUIET_MODE)
-		gotoxy(1, 25);
+	system("cls");
+	if (winner == 0)
+		cout << "The game ended in a tie" << endl;
+	else
+		cout << "The winner is player " << winner << endl;
+	/*if (start&& showMode != QUIET_MODE)
+		gotoxy(1, 25);*/
 	setTextbBackground(RED);
 	setTextColor(WHITE);
 	for (i = 0; i < numOfPlayers; i++)

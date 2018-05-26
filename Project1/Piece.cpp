@@ -95,9 +95,9 @@ bool Piece::operator==(const Piece & p)
 	//In case that there is a flag to the active object or the parameter object the function returns TRUE because the two  pieces are lose in this situation.
 	if (pieceType == p.pieceType)
 		return true;
-	else if ((pieceType == BOMB) || (p.pieceType == BOMB))
+	else if ((pieceType == FLAG) || (p.pieceType == FLAG))
 		return true;
-	else if ((joker == true) || (p.joker==true))
+	else if ((pieceType == BOMB) || (p.pieceType == BOMB))
 		return true;
 	return false;
 }
