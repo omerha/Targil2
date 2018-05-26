@@ -41,7 +41,7 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 	while (!next)
 	{
 		//gotoxy(37, 3 + playerNumber * 2);
-		gotoxy(0, 25);
+		gotoxy(0, 26);
 		setTextColor(WHITE);
 		cout << "Player " << playerNumber << " please enter your move " << endl;
 		getline(cin, tmpLine);
@@ -85,6 +85,12 @@ bool keyBoardPlayer::move(int & moveNum, int & newXLocation, int & newYLocation,
 		}
 		if (!next)
 		{
+			gotoxy(0, 25);
+			for (int i = 0; i < 7; i++)
+			{
+				cout << "                                              " << endl;
+			}
+			gotoxy(0, 25);
 			printError();
 			status = noReason;
 			error = noError;
