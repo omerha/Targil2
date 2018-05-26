@@ -22,8 +22,7 @@ void Piece::drawPiece(Color color, int xL, int yL)
 {
 	if (joker)
 	{
-		if (revealJoker)
-			setTextbBackground(color);
+		setTextbBackground(color);
 	revealJoker = true;
 	}
 	else
