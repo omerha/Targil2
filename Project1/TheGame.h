@@ -15,9 +15,8 @@ using namespace std;
 class TheGame
 {
 	int numOfPlayers;
-	Player* p[2];
+	Player* p[NUM_OF_PALYERS];
 	int winner;
-//	Piece gameBoard[N+1][M+1]; //need to check if we actually need this board
 	int showMode;
 	int delayTime;
 	bool showOnlyKnownInfo = false;
@@ -32,7 +31,7 @@ public:
 	TheGame() 
 	{
 		winner = 0;
-		numOfPlayers = 2;
+		numOfPlayers = NUM_OF_PALYERS;
 		over = false;
 		showMode = 2;
 		delayTime = 50;

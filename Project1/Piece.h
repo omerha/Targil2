@@ -30,7 +30,6 @@ enum Pieces
 
 class Piece
 {
-	//int x, y;
 	char pieceType;
 	bool joker;
 	bool revealType;
@@ -41,18 +40,9 @@ public:
 	{
 		revealJoker = true;
 		revealType = false;
-	//	x = y = 0;
 		joker = false;
 		pieceType = EMPTY_PIECE;
 	}
-	//int getPieceX()
-	//{
-	//	return x;
-	//}
-	//int getPieceY()
-	//{
-	//	return y;
-	//}
 	char getPieceType()
 	{
 		return pieceType;
@@ -65,14 +55,6 @@ public:
 	{
 		revealJoker = jokerStatus;
 	}
-	//void setPieceX(int pX)
-	//{
-	//	x = pX;
-	//}
-	//void setPieceY(int pY)
-	//{
-	//	y = pY;
-	//}
 	void setPieceType(char pPieceType)
 	{
 		pieceType = pPieceType;

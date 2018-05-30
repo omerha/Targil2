@@ -10,7 +10,10 @@ void argumentsToMain(int argc, char* argv[], TheGame &game)
 	for (i = 1; i < argc && legal; i++)
 	{
 		if (!strcmp(argv[i], "-console"))
+		{
 			consoleGame = true;
+			break;//Amir wrote in the forum that all the display settings that applied on files are not inclued when it's consle game.
+		}
 		else if (!strcmp(argv[i], "-quiet"))
 			playerShow = 0;
 		else if (!strcmp(argv[i], "-show-all"))

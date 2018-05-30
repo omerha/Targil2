@@ -6,7 +6,7 @@ using namespace std;
 Player::Player() //Constructor
 {
 	status = noReason;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < NUM_OF_PIECES_TYPE; i++)
 		counterPieces[i] = 0;
 	playerBoard = new Piece*[N + 1];
 	for (int i = 0; i < M + 1; i++) {

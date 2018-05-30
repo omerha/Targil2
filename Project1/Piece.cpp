@@ -5,7 +5,6 @@ void Piece::drawPiece(int xL, int yL)
 {
 	gotoxy(xL*3+3, yL*2+3);
 	cout << *this;
-	//cout << pieceType;
 }
 
 void Piece::removePiece(int xL, int yL)
@@ -29,8 +28,6 @@ void Piece::drawPiece(Color color, int xL, int yL)
 		setTextColor(color);
 	gotoxy(xL * 3+3, yL * 2+3);
 	cout << *this;
-	//cout << pieceType;
-	//revealType = true;
 
 }
 
@@ -40,7 +37,6 @@ void Piece::drawUnknownPiece(Color color, int xL, int yL)
 	gotoxy(xL * 3+3, yL * 2+3);
 	if (revealType)
 		cout << *this;
-		//cout << pieceType;
 	else
 		cout << UNKNOWN_PIECE;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include <string>
 #include "Piece.h"
@@ -15,30 +16,17 @@
 #define NUM_OF_BOMB 2
 #define NUM_OF_JOKER 2
 #define NUM_OF_FLAG 1
-#define _CRT_SECURE_NO_WARNINGS
+#define NUM_OF_MOVING_PIECES 3
 
 class Player
 {
 	friend class TheGame;
-	//Piece playerBoard[N+1][M+1];
-	
-	
-	
-	//std::string startGameFile; 
-//	std::string movesFile; 
-
-	
-	//string movesArr[100];
-//	int numOfMoves = 0;
 	Color color;
-//	FilesPlayer startFile;
-//	FilesPlayer moveFile;
 protected:
-	int counterPieces[6];
+	int counterPieces[NUM_OF_PIECES_TYPE];
 	Reason status;
 	Piece** playerBoard;
 	Error error;
-	//int errorLine;
 	int playerNumber;
 public:
 	Piece** getPlayerBoard() {
@@ -54,9 +42,7 @@ public:
 	Player();
 	virtual ~Player();
 	virtual bool move(int& moveNum, int& newXLocation, int& newYLocation, int& oldXLocation, int& oldYLocation, int& jokerXLocation, int& jokerYLocation, char& newJokerType) =0;
-	//void movePlayerError(int lineNum);  we need this?
 	void setPlayerStatus(Reason reason, Error theError);
-	//virtual bool readMove(int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType)=0;
 	void setColor(Color c) {
 		color = c;
 	}
