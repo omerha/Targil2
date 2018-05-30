@@ -13,9 +13,6 @@ class FilesPlayer : public Player {
 	static int currentNumPlayer;
 	bool illegalFile = false;
 	int errLine = NULL;
-	
-//	Error error = noError;
-//	Reason fileStatus = noReason;
 	ifstream inFile;
 	string startGameFile;
 	string movesFile;

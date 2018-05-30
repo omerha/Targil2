@@ -352,9 +352,10 @@ bool Player::readCurrentStartLine(string currentLine, Error err,int& lenLine)
 			setPlayerStatus(badPosition, unKnownPiece);
 			return false;
 		}
+		countPieces(type);
 	}
 	playerBoard[xLocation][yLocation].setPieceType(type);
-	countPieces(type);
+	
 	return true;
 }
 bool Player::readCurrentMove(string currentLine, Error err, int & newXLocation, int & newYLocation, int & oldXLocation, int & oldYLocation, int & jokerXLocation, int & jokerYLocation, char & newJokerType)
